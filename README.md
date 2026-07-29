@@ -21,6 +21,8 @@
 - 🗄️ **PostgreSQL Audit & Wiki**: Integrated audit logging and security knowledgebase powered by HikariCP connection pooling.
 - 🤖 **Async Architecture**: Every event and command executes asynchronously without blocking Discord gateway threads.
 
+For complete documentation on all bot commands and usage, see the **[Commands Guide](COMMANDS.md)**.
+
 ---
 
 ## 🏗️ Architecture & Package Structure
