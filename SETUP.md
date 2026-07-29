@@ -1,0 +1,117 @@
+# 🛠️ Aegis Bot Setup & Deployment Guide
+
+This guide provides step-by-step instructions for installing, configuring, running, and testing **Aegis** on your system.
+
+---
+
+## 📋 Prerequisites
+
+Before setting up Aegis, make sure you have installed:
+
+1. **Java 26 JDK** (with Virtual Thread support)
+   - Verify with: `java -version`
+2. **Apache Maven 3.8+**
+   - Verify with: `mvn -version`
+3. **PostgreSQL Database** (Version 14+)
+   - Running locally or on a remote host (default port `5432`).
+4. **Discord Bot Token**
+   - Created in the [Discord Developer Portal](https://discord.com/developers/applications).
+
+---
+
+## 🔑 Step 1: Obtain Discord Bot Credentials
+
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications).
+2. Click **New Application** and give it a name (e.g., `Aegis Security`).
+3. Navigate to **Bot** tab on the left menu.
+4. Click **Reset Token** and copy your **Bot Token** (save this securely).
+5. Scroll down to **Privileged Gateway Intents** and enable:
+   - ✅ **Presence Intent**
+   - ✅ **Server Members Intent**
+   - ✅ **Message Content Intent**
+6. Click **Save Changes**.
+7. Navigate to **OAuth2 -> URL Generator**:
+   - Scopes: `bot`, `applications.commands`
+   - Bot Permissions: `Administrator` (or `Manage Roles`, `Kick Members`, `Ban Members`, `Read Messages/View Channels`, `Send Messages`).
+   - Copy the generated URL and paste it into your browser to invite the bot to your Discord server.
+
+---
+
+## 🗄️ Step 2: Database Setup (PostgreSQL)
+
+Run the following SQL commands to create the database and user:
+
+```sql
+CREATE DATABASE cyberheaven_aegis;
+CREATE USER aegis_user WITH PASSWORD 'your_secure_password';
+GRANT ALL PRIVILEGES ON DATABASE cyberheaven_aegis TO aegis_user;
+```
+
+*(Note: Aegis automatically initializes all required tables (`aegis_wiki`, `aegis_audit_log`) on first startup.)*
+
+---
+
+## ⚙️ Step 3: Environment Configuration (`.env`)
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Cyberheaven/Aegis.git
+   cd Aegis
+   ```
+
+2. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Edit `.env` with your actual credentials:
+   ```env
+   # Discord Bot Credentials
+   DISCORD_TOKEN=your_actual_discord_bot_token_here
+
+   # Database Configuration (PostgreSQL)
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=cyberheaven_aegis
+   DB_USER=aegis_user
+   DB_PASSWORD=your_secure_password
+
+   # Optional Remote AI Integration
+   GEMINI_API_KEY=your_gemini_api_key_here
+
+   # Bot Customization
+   BOT_PREFIX=!
+   BOT_STATUS=🛡️ Aegis | CyberHeaven Security System
+   ```
+
+---
+
+## 🚀 Step 4: Build & Run
+
+### Option A: Build and Run JAR
+```bash
+mvn clean package
+java --enable-preview -jar target/aegis-2.0.0.jar
+```
+
+### Option B: Run via Maven Directly
+```bash
+mvn exec:java -Dexec.mainClass="org.cyberheaven.Main"
+```
+
+---
+
+## 🧪 Step 5: Verification & Testing
+
+Once Aegis reports `🛡️ Aegis Bot is online and guarding CyberHeaven!`, test the following commands in your Discord server:
+
+1. **`!status`**: Verifies latency, system uptime, and confirms Java 26 Virtual Threads are operational.
+2. **`!audit`**: Performs a security audit on server roles and alerts on permission risks (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`).
+
+---
+
+## 🆘 Troubleshooting
+
+- **`Missing required environment variable: DISCORD_TOKEN`**: Ensure `.env` is located in the working directory and contains a valid token.
+- **Database Connection Warnings**: Verify PostgreSQL service is running on port 5432 and the credentials in `.env` match your PostgreSQL user.
+- **Bot Doesn't Respond to Messages**: Double check that **Message Content Intent** is enabled in the Discord Developer Portal.

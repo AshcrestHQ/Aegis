@@ -46,23 +46,22 @@ org.cyberheaven/
 
 ## 🛠️ Setup & Local Development
 
-### 1. Clone
+For complete detailed installation, environment setup, and Discord developer portal configuration, see the **[Setup Guide](SETUP.md)**.
+
+### Quick Start:
+
 ```bash
+# 1. Clone
 git clone https://github.com/Cyberheaven/Aegis.git
 cd Aegis
-```
 
-### 2. Configuration
-Copy `.env.example` to `.env`:
-```bash
+# 2. Configuration
 cp .env.example .env
-```
-Fill in your `DISCORD_TOKEN` and PostgreSQL credentials.
+# Edit .env with your DISCORD_TOKEN and PostgreSQL credentials
 
-### 3. Build & Run
-```bash
+# 3. Build & Run
 mvn clean package
-java -jar target/aegis-2.0.0.jar
+java --enable-preview -jar target/aegis-2.0.0.jar
 ```
 
 ---
