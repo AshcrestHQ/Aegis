@@ -45,6 +45,7 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         String commandName = event.getName();
+        if ("aegis".equalsIgnoreCase(commandName)) commandName = "source";
         ICommand command = bot.getCommand(commandName);
 
         if (command != null && command.supportsSlash()) {

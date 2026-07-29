@@ -42,6 +42,10 @@ public class AegisBot {
     private void registerCommands() {
         registerCommand(new StatusCommand());
         registerCommand(new AuditCommand());
+        registerCommand(new HelpCommand());
+        registerCommand(new WikiAddCommand(dbManager));
+        registerCommand(new CyberHeavenCommand());
+        registerCommand(new SourceCommand());
     }
 
     private void registerCommand(ICommand command) {
@@ -64,11 +68,26 @@ public class AegisBot {
         return CompletableFuture.runAsync(() -> {
             try {
                 jda.awaitReady();
+                registerSlashCommandsWithJDA();
                 System.out.println("🛡️ Aegis Bot is online and guarding CyberHeaven!");
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }, virtualThreadExecutor);
+    }
+
+    private void registerSlashCommandsWithJDA() {
+        jda.updateCommands().addCommands(
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("help", "Display Aegis commands categorized by security, wiki, and system info"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("status", "Check Aegis bot system health, ping, and uptime"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("audit", "Audit server permissions, roles, and administrative risk levels"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("cyberheaven", "View official links and resources for CyberHeaven"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("source", "View open-source GitHub repository and MIT license info for Aegis"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("aegis", "View open-source GitHub repository and MIT license info for Aegis"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("wikiadd", "Add or update an entry in the community security wiki")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "keyword", "Wiki topic keyword", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "content", "Wiki content body", true)
+        ).queue();
     }
 
     public void shutdown() {
