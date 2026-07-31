@@ -19,7 +19,8 @@ public class NowPlayingCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        event.replyEmbeds(buildNowPlayingEmbed(event.getGuild()).build()).queue();
+        event.deferReply().queue();
+        event.getHook().sendMessageEmbeds(buildNowPlayingEmbed(event.getGuild()).build()).queue();
     }
 
     private EmbedBuilder buildNowPlayingEmbed(net.dv8tion.jda.api.entities.Guild guild) {

@@ -30,15 +30,17 @@ public class PlayCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
+
         OptionMapping option = event.getOption("input");
         if (option == null) {
-            event.reply("⚠️ Please provide a song name, URL, or Apple Music link.").setEphemeral(true).queue();
+            event.getHook().sendMessage("⚠️ Please provide a song name, URL, or Apple Music link.").queue();
             return;
         }
 
         Member member = event.getMember();
         if (member == null || member.getVoiceState() == null || !member.getVoiceState().inAudioChannel()) {
-            event.reply("⚠️ You must be connected to a Voice Channel to play music.").setEphemeral(true).queue();
+            event.getHook().sendMessage("⚠️ You must be connected to a Voice Channel to play music.").queue();
             return;
         }
 

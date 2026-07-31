@@ -29,19 +29,20 @@ public class SkipCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
         GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild());
         AudioTrack playing = musicManager.getPlayer().getPlayingTrack();
 
         if (playing == null) {
-            event.reply("⚠️ No track is currently playing.").setEphemeral(true).queue();
+            event.getHook().sendMessage("⚠️ No track is currently playing.").queue();
             return;
         }
 
         boolean skipped = musicManager.getScheduler().nextTrack();
         if (skipped) {
-            event.reply("⏭️ Skipped `" + playing.getInfo().title + "`").queue();
+            event.getHook().sendMessage("⏭️ Skipped `" + playing.getInfo().title + "`").queue();
         } else {
-            event.reply("⏭️ Skipped `" + playing.getInfo().title + "`. Queue is now empty.").queue();
+            event.getHook().sendMessage("⏭️ Skipped `" + playing.getInfo().title + "`. Queue is now empty.").queue();
         }
     }
 

@@ -20,7 +20,8 @@ public class QueueCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        event.replyEmbeds(buildQueueEmbed(event.getGuild()).build()).queue();
+        event.deferReply().queue();
+        event.getHook().sendMessageEmbeds(buildQueueEmbed(event.getGuild()).build()).queue();
     }
 
     private EmbedBuilder buildQueueEmbed(net.dv8tion.jda.api.entities.Guild guild) {

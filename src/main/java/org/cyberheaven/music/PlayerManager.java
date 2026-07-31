@@ -32,7 +32,11 @@ public class PlayerManager {
         this.musicManagers = new HashMap<>();
         this.playerManager = new DefaultAudioPlayerManager();
 
-        AudioSourceManagers.registerRemoteSources(this.playerManager);
+        // Register Lavalink YouTube Source Manager plugin for updated YouTube clients
+        dev.lavalink.youtube.YoutubeAudioSourceManager youtube = new dev.lavalink.youtube.YoutubeAudioSourceManager();
+        this.playerManager.registerSourceManager(youtube);
+
+        AudioSourceManagers.registerRemoteSources(this.playerManager, com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class);
         AudioSourceManagers.registerLocalSource(this.playerManager);
     }
 
@@ -159,8 +163,12 @@ public class PlayerManager {
                 .addField("Duration", formatDuration(track.getDuration()), true)
                 .setColor(new Color(138, 43, 226));
 
-        if (callback != null && !callback.isAcknowledged()) {
-            callback.replyEmbeds(embed.build()).queue();
+        if (callback != null) {
+            if (callback.isAcknowledged()) {
+                callback.getHook().sendMessageEmbeds(embed.build()).queue();
+            } else {
+                callback.replyEmbeds(embed.build()).queue();
+            }
         } else if (channel != null) {
             channel.sendMessageEmbeds(embed.build()).queue();
         }
@@ -185,8 +193,12 @@ public class PlayerManager {
     }
 
     private void sendReply(IReplyCallback callback, TextChannel channel, String msg) {
-        if (callback != null && !callback.isAcknowledged()) {
-            callback.reply(msg).queue();
+        if (callback != null) {
+            if (callback.isAcknowledged()) {
+                callback.getHook().sendMessage(msg).queue();
+            } else {
+                callback.reply(msg).queue();
+            }
         } else if (channel != null) {
             channel.sendMessage(msg).queue();
         }

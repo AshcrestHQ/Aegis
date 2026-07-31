@@ -18,10 +18,11 @@ public class StopCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
         GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild());
         musicManager.getScheduler().clearQueue();
         event.getGuild().getAudioManager().closeAudioConnection();
-        event.reply("⏹️ Stopped playback, cleared queue, and disconnected from Voice Channel.").queue();
+        event.getHook().sendMessage("⏹️ Stopped playback, cleared queue, and disconnected from Voice Channel.").queue();
     }
 
     @Override

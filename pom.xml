@@ -61,6 +61,19 @@
             </exclusions>
         </dependency>
 
+        <!-- Lavaplayer YouTube Source Plugin (Fixes YouTube Search HTTP 400) -->
+        <dependency>
+            <groupId>dev.lavalink.youtube</groupId>
+            <artifactId>common</artifactId>
+            <version>1.11.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- HTML Parsing for Apple Music Metadata -->
         <dependency>
             <groupId>org.jsoup</groupId>

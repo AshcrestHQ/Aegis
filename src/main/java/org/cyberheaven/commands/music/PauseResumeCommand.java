@@ -34,19 +34,20 @@ public class PauseResumeCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        event.deferReply().queue();
         GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild());
         AudioPlayer player = musicManager.getPlayer();
 
         if (player.getPlayingTrack() == null) {
-            event.reply("⚠️ No track is currently playing.").setEphemeral(true).queue();
+            event.getHook().sendMessage("⚠️ No track is currently playing.").queue();
             return;
         }
 
         player.setPaused(isPause);
         if (isPause) {
-            event.reply("⏸️ Paused playback.").queue();
+            event.getHook().sendMessage("⏸️ Paused playback.").queue();
         } else {
-            event.reply("▶️ Resumed playback.").queue();
+            event.getHook().sendMessage("▶️ Resumed playback.").queue();
         }
     }
 
