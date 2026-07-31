@@ -7,7 +7,7 @@
 
     <groupId>org.cyberheaven</groupId>
     <artifactId>aegis</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <name>Aegis</name>
@@ -24,9 +24,32 @@
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
+        <repository>
+            <id>lavalink-releases</id>
+            <name>Lavalink Releases</name>
+            <url>https://maven.lavalink.dev/releases</url>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <!-- Lavaplayer for Voice Channel Music -->
+        <dependency>
+            <groupId>dev.arbjerg</groupId>
+            <artifactId>lavaplayer</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+
+        <!-- HTML Parsing for Apple Music Metadata -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+
         <!-- Discord JDA -->
         <dependency>
             <groupId>net.dv8tion</groupId>

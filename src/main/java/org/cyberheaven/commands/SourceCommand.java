@@ -41,5 +41,5 @@ public class SourceCommand implements ICommand {
     public String getDescription() { return "View the open-source GitHub repository and MIT license info for Aegis"; }
 
     @Override
-    publicString getUsage() { return "!source or /source"; }
+    public String getUsage() { return "!source or /source"; }
 }

@@ -29,8 +29,24 @@ This document lists all available commands for **Aegis** (`org.cyberheaven`), th
 
 ---
 
+## 🎵 Voice Channel Music & Apple Music Commands
+
+| Command | Usage | Description | Slash Support |
+|---|---|---|---|
+| `play` | `!play <input>` or `/play input:<string>` | Joins user's VC and plays/queues audio. Supports Apple Music links (`music.apple.com`), YouTube titles/URLs, and direct streams. | ✅ Yes |
+| `skip` | `!skip` or `/skip` | Skips the currently playing track. | ✅ Yes |
+| `stop` | `!stop` / `!leave` or `/stop` | Stops playback, clears the queue, and disconnects Aegis from VC. | ✅ Yes |
+| `queue` | `!queue` or `/queue` | Displays the upcoming music queue list and now playing track. | ✅ Yes |
+| `nowplaying` | `!nowplaying` or `/nowplaying` | Displays progress bar, time elapsed, and metadata for current track. | ✅ Yes |
+| `pause` | `!pause` or `/pause` | Pauses audio playback. | ✅ Yes |
+| `resume` | `!resume` or `/resume` | Resumes paused audio playback. | ✅ Yes |
+
+---
+
 ## ⚡ Execution Architecture
 
 - All commands execute **asynchronously** using Java 26 **Virtual Threads** via `CompletableFuture.runAsync()`.
 - Commands do not block gateway websocket processing.
 - Database queries use HikariCP non-blocking connection pooling.
+- Apple Music links resolve metadata asynchronously using iTunes REST API and web OpenGraph meta parsing, automatically finding streaming sources.
+

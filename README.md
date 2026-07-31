@@ -17,6 +17,7 @@
 
 - 🛡️ **Permission & Guild Security Auditing**: Real-time identification of dangerous permission allocations (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`) and privilege escalation risks.
 - 🚨 **Anti-Raid & Guild Security Engine**: Non-blocking monitoring using Java 26 Virtual Threads for ultra-low latency under heavy raid loads.
+- 🎵 **VC Music & Apple Music Integration**: Full-featured Voice Channel music playback powered by Lavaplayer. Resolves Apple Music links (`music.apple.com`), displays Apple Music Red artwork embeds, supports direct track/artist search, queues, interactive progress bars, and playback state controls.
 - 🔐 **Role & Access Verification**: Modular schema support for verifying members prior to gaining access to security labs and CTF channels.
 - 🗄️ **PostgreSQL Audit & Wiki**: Integrated audit logging and security knowledgebase powered by HikariCP connection pooling.
 - 🤖 **Async Architecture**: Every event and command executes asynchronously without blocking Discord gateway threads.
@@ -31,6 +32,8 @@ For complete documentation on all bot commands and usage, see the **[Commands Gu
 org.cyberheaven/
 ├── core/             # AegisBot core, Virtual Threads executor & config
 ├── commands/         # Modular command pattern (audit, status, etc.)
+│   └── music/        # Voice channel music commands (play, skip, stop, queue, etc.)
+├── music/            # Lavaplayer audio engine, Apple Music resolver & scheduler
 ├── security/         # Security audit, permission analysis & anti-raid engine
 ├── db/               # PostgreSQL DatabaseManager & HikariCP pool
 └── Main.java         # Bot initialization & lifecycle manager
@@ -42,7 +45,7 @@ org.cyberheaven/
 
 - **Java 26** (Virtual Thread support enabled)
 - **PostgreSQL 14+**
-- **Discord Bot Token** (with `GUILD_MESSAGES`, `MESSAGE_CONTENT`, and `GUILD_MEMBERS` intent enabled)
+- **Discord Bot Token** (with `GUILD_MESSAGES`, `MESSAGE_CONTENT`, `GUILD_MEMBERS`, and `GUILD_VOICE_STATES` intents enabled)
 
 ---
 

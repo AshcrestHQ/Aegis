@@ -32,6 +32,13 @@ public class HelpCommand implements ICommand {
                 .addField("📚 Community Wiki",
                         "`/wiki get <keyword>` - Query the security knowledgebase\n" +
                         "`/wiki add <keyword> <content>` - Add/update a wiki entry (*Staff/Admin restricted*)", false)
+                .addField("🎵 VC Music & Apple Music",
+                        "`/play <input>` - Play audio in VC (supports Apple Music, YouTube, Direct URLs)\n" +
+                        "`/skip` - Skip current track\n" +
+                        "`/stop` (or `!leave`) - Stop music, clear queue, & disconnect from VC\n" +
+                        "`/queue` - View queued tracks and now playing song\n" +
+                        "`/nowplaying` - Show progress bar & current track info\n" +
+                        "`/pause` / `/resume` - Pause or resume music playback", false)
                 .addField("⚙️ System & Community Info",
                         "`/status` - Check bot gateway latency, uptime, and Java 26 status\n" +
                         "`/cyberheaven` - View official CyberHeaven community links\n" +

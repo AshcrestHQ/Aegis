@@ -1,6 +1,7 @@
 package org.cyberheaven.core;
 
 import org.cyberheaven.commands.*;
+import org.cyberheaven.commands.music.*;
 import org.cyberheaven.db.DatabaseManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,7 +31,8 @@ public class AegisBot {
                 .enableIntents(
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,
-                        GatewayIntent.GUILD_MEMBERS
+                        GatewayIntent.GUILD_MEMBERS,
+                        GatewayIntent.GUILD_VOICE_STATES
                 )
                 .setActivity(Activity.watching("CyberHeaven Security"))
                 .addEventListeners(new CommandListener(this))
@@ -46,6 +48,17 @@ public class AegisBot {
         registerCommand(new WikiAddCommand(dbManager));
         registerCommand(new CyberHeavenCommand());
         registerCommand(new SourceCommand());
+
+        // VC Music & Apple Music Commands
+        registerCommand(new PlayCommand());
+        registerCommand(new SkipCommand());
+        StopCommand stopCmd = new StopCommand();
+        registerCommand(stopCmd);
+        commands.put("leave", stopCmd);
+        registerCommand(new QueueCommand());
+        registerCommand(new NowPlayingCommand());
+        registerCommand(new PauseResumeCommand(true));
+        registerCommand(new PauseResumeCommand(false));
     }
 
     private void registerCommand(ICommand command) {
@@ -86,7 +99,15 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("aegis", "View open-source GitHub repository and MIT license info for Aegis"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("wikiadd", "Add or update an entry in the community security wiki")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "keyword", "Wiki topic keyword", true)
-                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "content", "Wiki content body", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "content", "Wiki content body", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("play", "Play audio in your VC (supports Apple Music, YouTube, direct audio URLs)")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "input", "Song title, URL, or Apple Music link", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("skip", "Skip the currently playing track"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("stop", "Stop playback, clear queue, and disconnect Aegis from VC"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("queue", "Display current music queue and now playing track"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("nowplaying", "Show progress bar and details of currently playing track"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("pause", "Pause audio playback"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("resume", "Resume paused audio playback")
         ).queue();
     }
 
