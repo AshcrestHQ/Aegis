@@ -32,7 +32,10 @@ Before setting up Aegis, make sure you have installed:
 6. Click **Save Changes**.
 7. Navigate to **OAuth2 -> URL Generator**:
    - Scopes: `bot`, `applications.commands`
-   - Bot Permissions: `Administrator` (or `Manage Roles`, `Kick Members`, `Ban Members`, `Read Messages/View Channels`, `Send Messages`).
+   - Bot Permissions:
+     - **General**: `Read Messages/View Channels`, `Manage Roles`, `Kick Members`, `Ban Members`
+     - **Text**: `Send Messages`, `Embed Links`, `Attach Files`, `Read Message History`
+     - **Voice**: `Connect`, `Speak`, `Use Voice Activity`
    - Copy the generated URL and paste it into your browser to invite the bot to your Discord server.
 
 ---
@@ -91,7 +94,7 @@ GRANT ALL PRIVILEGES ON DATABASE cyberheaven_aegis TO aegis_user;
 ### Option A: Build and Run JAR
 ```bash
 mvn clean package
-java --enable-preview -jar target/aegis-2.0.0.jar
+java --enable-preview -jar target/aegis-2.1.0.jar
 ```
 
 ### Option B: Run via Maven Directly
@@ -105,8 +108,12 @@ mvn exec:java -Dexec.mainClass="org.cyberheaven.Main"
 
 Once Aegis reports `🛡️ Aegis Bot is online and guarding CyberHeaven!`, test the following commands in your Discord server:
 
-1. **`!status`**: Verifies latency, system uptime, and confirms Java 26 Virtual Threads are operational.
-2. **`!audit`**: Performs a security audit on server roles and alerts on permission risks (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`).
+1. **`!status` / `/status`**: Verifies latency, system uptime, and confirms Java 26 Virtual Threads are operational.
+2. **`!audit` / `/audit`**: Performs a security audit on server roles and alerts on permission risks (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`).
+3. **`!play` / `/play`**: Join a Voice Channel and play music via direct search, YouTube link, or Apple Music URL (`https://music.apple.com/...`).
+4. **`!nowplaying` / `/nowplaying`**: Displays current track details and visual progress bar.
+5. **`!queue` / `/queue`**: Shows upcoming tracks in the music queue.
+6. **`!stop` / `/stop`**: Stops playback, clears the queue, and disconnects the bot from VC.
 
 ---
 
@@ -115,3 +122,5 @@ Once Aegis reports `🛡️ Aegis Bot is online and guarding CyberHeaven!`, test
 - **`Missing required environment variable: DISCORD_TOKEN`**: Ensure `.env` is located in the working directory and contains a valid token.
 - **Database Connection Warnings**: Verify PostgreSQL service is running on port 5432 and the credentials in `.env` match your PostgreSQL user.
 - **Bot Doesn't Respond to Messages**: Double check that **Message Content Intent** is enabled in the Discord Developer Portal.
+- **Audio Doesn't Play in VC**: Ensure the bot has `Connect` and `Speak` permissions in the target Voice Channel.
+

@@ -66,7 +66,7 @@ cp .env.example .env
 
 # 3. Build & Run
 mvn clean package
-java --enable-preview -jar target/aegis-2.0.0.jar
+java --enable-preview -jar target/aegis-2.1.0.jar
 ```
 
 ---

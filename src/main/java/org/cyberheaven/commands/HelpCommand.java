@@ -43,7 +43,8 @@ public class HelpCommand implements ICommand {
                         "`/status` - Check bot gateway latency, uptime, and Java 26 status\n" +
                         "`/cyberheaven` - View official CyberHeaven community links\n" +
                         "`/source` (or `/aegis`) - View open-source GitHub repository & MIT license info\n" +
-                        "`/help` - Display this command directory", false)
+                        "`/help` - Display this command directory\n" +
+                        "📖 **Deployment Guide**: [SETUP.md](https://github.com/Cyberheaven/Aegis/blob/main/SETUP.md)", false)
                 .setFooter("CyberHeaven Aegis | Non-blocking Java 26 Virtual Threads", null)
                 .setTimestamp(Instant.now());
     }
