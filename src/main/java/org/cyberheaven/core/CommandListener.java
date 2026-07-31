@@ -60,4 +60,16 @@ public class CommandListener extends ListenerAdapter {
             event.reply("❌ Command not found.").setEphemeral(true).queue();
         }
     }
+
+    @Override
+    public void onGuildVoiceUpdate(net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent event) {
+        if (event.getMember().getIdLong() == event.getJDA().getSelfUser().getIdLong()) {
+            if (event.getChannelJoined() == null) {
+                // Bot disconnected from VC, stop reconnect loop & clear state
+                org.cyberheaven.music.GuildMusicManager musicManager = org.cyberheaven.music.PlayerManager.getInstance().getGuildMusicManager(event.getGuild());
+                musicManager.getScheduler().clearQueue();
+                event.getGuild().getAudioManager().closeAudioConnection();
+            }
+        }
+    }
 }

@@ -12,6 +12,14 @@ This document lists all available commands for **Aegis** (`org.cyberheaven`), th
 
 ---
 
+## 🤖 AI Assistant Commands (Google Gemini)
+
+| Command | Usage | Description | Slash Support |
+|---|---|---|---|
+| `ask` | `!ask <prompt>` or `/ask prompt:<string>` | Asks Aegis AI questions powered by Google Gemini 2.5 Flash API. | ✅ Yes |
+
+---
+
 ## 🛡️ Security & Permission Engineering Commands
 
 | Command | Usage | Description | Slash Support |

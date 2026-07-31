@@ -19,7 +19,8 @@ public class HelpCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        event.replyEmbeds(buildHelpEmbed().build()).queue();
+        event.deferReply().queue();
+        event.getHook().sendMessageEmbeds(buildHelpEmbed().build()).queue();
     }
 
     private EmbedBuilder buildHelpEmbed() {
@@ -27,6 +28,8 @@ public class HelpCommand implements ICommand {
                 .setTitle("🛡️ Aegis Command Directory")
                 .setDescription("High-performance Discord security engineering & community bot for CyberHeaven.")
                 .setColor(new Color(0x00A8FC))
+                .addField("🤖 AI Assistant (Google Gemini)",
+                        "`/ask <prompt>` (or `!ask <prompt>`) - Ask Aegis AI questions powered by Google Gemini 2.5 Flash\n", false)
                 .addField("🛡️ Security & Engineering",
                         "`/audit` - Audit server roles, elevated privileges, and security risks\n", false)
                 .addField("📚 Community Wiki",

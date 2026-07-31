@@ -61,11 +61,11 @@
             </exclusions>
         </dependency>
 
-        <!-- Lavaplayer YouTube Source Plugin (Fixes YouTube Search HTTP 400) -->
+        <!-- Lavaplayer YouTube Source Plugin (Fixes YouTube Search HTTP 400 & Cipher) -->
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
-            <version>1.11.1</version>
+            <version>1.18.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -81,11 +81,28 @@
             <version>1.18.1</version>
         </dependency>
 
-        <!-- Discord JDA -->
+        <!-- Discord JDA 6.5.0 (with DAVE Voice E2EE support) -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.3.0</version>
+            <version>6.5.0</version>
+        </dependency>
+
+        <!-- JDAVE Discord Voice E2EE DAVE Protocol Implementation -->
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>jdave-api</artifactId>
+            <version>0.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>jdave-native-linux-x86-64</artifactId>
+            <version>0.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>jdave-native-win-x86-64</artifactId>
+            <version>0.1.8</version>
         </dependency>
 
         <!-- Database & Connection Pooling -->

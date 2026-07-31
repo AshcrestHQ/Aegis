@@ -32,12 +32,17 @@ public class PlayerManager {
         this.musicManagers = new HashMap<>();
         this.playerManager = new DefaultAudioPlayerManager();
 
-        // Register Lavalink YouTube Source Manager plugin with Music, Web, and Ios clients
+        // Register Lavalink YouTube Source Manager plugin with WEB, MUSIC, WEBEMBEDDED, ANDROID_VR, TV, TVHTML5SIMPLY, IOS, ANDROID fallback clients
         dev.lavalink.youtube.YoutubeAudioSourceManager youtube = new dev.lavalink.youtube.YoutubeAudioSourceManager(
                 true,
-                new dev.lavalink.youtube.clients.Music(),
                 new dev.lavalink.youtube.clients.Web(),
-                new dev.lavalink.youtube.clients.Ios()
+                new dev.lavalink.youtube.clients.Music(),
+                new dev.lavalink.youtube.clients.WebEmbedded(),
+                new dev.lavalink.youtube.clients.AndroidVr(),
+                new dev.lavalink.youtube.clients.Tv(),
+                new dev.lavalink.youtube.clients.TvHtml5Simply(),
+                new dev.lavalink.youtube.clients.Ios(),
+                new dev.lavalink.youtube.clients.Android()
         );
         this.playerManager.registerSourceManager(youtube);
 

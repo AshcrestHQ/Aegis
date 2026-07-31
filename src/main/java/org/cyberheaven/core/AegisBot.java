@@ -3,8 +3,10 @@ package org.cyberheaven.core;
 import org.cyberheaven.commands.*;
 import org.cyberheaven.commands.music.*;
 import org.cyberheaven.db.DatabaseManager;
+import club.minnced.discord.jdave.interop.JDaveSessionFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.audio.AudioModuleConfig;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
@@ -28,6 +30,10 @@ public class AegisBot {
         this.dbManager = DatabaseManager.getInstance();
 
         this.jda = JDABuilder.createDefault(Config.DISCORD_TOKEN)
+                .setAudioModuleConfig(
+                        new AudioModuleConfig()
+                                .withDaveSessionFactory(new JDaveSessionFactory())
+                )
                 .enableIntents(
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT,
@@ -48,6 +54,7 @@ public class AegisBot {
         registerCommand(new WikiAddCommand(dbManager));
         registerCommand(new CyberHeavenCommand());
         registerCommand(new SourceCommand());
+        registerCommand(new AskCommand());
 
         // VC Music & Apple Music Commands
         registerCommand(new PlayCommand());
@@ -97,6 +104,8 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("cyberheaven", "View official links and resources for CyberHeaven"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("source", "View open-source GitHub repository and MIT license info for Aegis"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("aegis", "View open-source GitHub repository and MIT license info for Aegis"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ask", "Ask Aegis AI (powered by Google Gemini 2.5 Flash)")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "prompt", "The question or prompt for Gemini AI", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("wikiadd", "Add or update an entry in the community security wiki")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "keyword", "Wiki topic keyword", true)
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "content", "Wiki content body", true),
