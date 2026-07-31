@@ -32,8 +32,13 @@ public class PlayerManager {
         this.musicManagers = new HashMap<>();
         this.playerManager = new DefaultAudioPlayerManager();
 
-        // Register Lavalink YouTube Source Manager plugin for updated YouTube clients
-        dev.lavalink.youtube.YoutubeAudioSourceManager youtube = new dev.lavalink.youtube.YoutubeAudioSourceManager();
+        // Register Lavalink YouTube Source Manager plugin with Music, Web, and Ios clients
+        dev.lavalink.youtube.YoutubeAudioSourceManager youtube = new dev.lavalink.youtube.YoutubeAudioSourceManager(
+                true,
+                new dev.lavalink.youtube.clients.Music(),
+                new dev.lavalink.youtube.clients.Web(),
+                new dev.lavalink.youtube.clients.Ios()
+        );
         this.playerManager.registerSourceManager(youtube);
 
         AudioSourceManagers.registerRemoteSources(this.playerManager, com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class);
