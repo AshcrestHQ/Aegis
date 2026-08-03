@@ -1,26 +1,26 @@
-# 🛡️ Aegis - CyberHeaven Security Engineering Bot
+# 🛡️ Aegis - AshcrestHQ Universal Discord Operations Bot
 
-> **Official Discord Bot for the CyberHeaven Security Education Community.**
-> Aegis is a high-performance Discord security bot built with **Java 26** and **Virtual Threads**, engineered specifically for server protection, anti-raid monitoring, permission auditing, role verification, and security-education tools.
+> **Universal Discord Bot for Security, Community Operations, Cyber RPG, AI & VC Audio.**
+> Aegis is a high-performance, public Discord bot built with **Java 26** and **Virtual Threads**, engineered for server protection, anti-raid monitoring, permission auditing, community security wiki, interactive Cyber RPG mini-games, Google Gemini AI assistant, and full VC music playback.
 
 ---
 
-## 🦅 Heritage & Tribute to Apex
+## 🦅 Heritage & Universal Mission
 
 > *From the ashes of Apex, Aegis arises.*
 > 
-> Aegis carries forward the foundational architectural lessons, high-throughput non-blocking design, and core principles born in [Apex](https://github.com/medhansh5/Apex). While Apex laid the groundwork for high-performance Discord utility processing, Aegis elevates the vision into dedicated security engineering, zero-trust server protection, and community verification for **CyberHeaven**.
+> Aegis carries forward the foundational architectural lessons, high-throughput non-blocking design, and core principles born in [Apex](https://github.com/medhansh5/Apex). Now evolved into a universal, public bot hosted by **AshcrestHQ** (`AshcrestHQ/Aegis`), Aegis is designed for any Discord community to invite, deploy, and utilize for security, AI assistance, voice channel audio, and interactive cyber gaming.
 
 ---
 
 ## ⚡ Key Features
 
-- 🛡️ **Permission & Guild Security Auditing**: Real-time identification of dangerous permission allocations (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`) and privilege escalation risks.
-- 🚨 **Anti-Raid & Guild Security Engine**: Non-blocking monitoring using Java 26 Virtual Threads for ultra-low latency under heavy raid loads.
-- 🎵 **VC Music & Apple Music Integration**: Full-featured Voice Channel music playback powered by Lavaplayer. Resolves Apple Music links (`music.apple.com`), displays Apple Music Red artwork embeds, supports direct track/artist search, queues, interactive progress bars, and playback state controls.
-- 🔐 **Role & Access Verification**: Modular schema support for verifying members prior to gaining access to security labs and CTF channels.
-- 🗄️ **PostgreSQL Audit & Wiki**: Integrated audit logging and security knowledgebase powered by HikariCP connection pooling.
-- 🤖 **Async Architecture**: Every event and command executes asynchronously without blocking Discord gateway threads.
+- 🎮 **Interactive Cyber Breach RPG**: High-octane cyber security penetration testing mini-game (`/hack`, `/profile`, `/leaderboard`, `/daily`) featuring interactive Discord Buttons, tactical intrusion vectors, hacker rank progression (`Script Kiddie` → `Netrunner` → `Security Architect` → `Cyber Sovereign`), and PostgreSQL vault economy (`🪙`).
+- 🤖 **Google Gemini AI Assistant**: Native `/ask` command powered by Google Gemini 2.5 Flash API executing asynchronously on Java 26 Virtual Threads.
+- 🔒 **Discord Voice DAVE E2EE & Lavaplayer Audio**: Full-featured Voice Channel music engine supporting Discord's end-to-end voice encryption (DAVE/JDAVE protocol), Apple Music metadata resolution (`music.apple.com`), YouTube multi-client fallback pipeline (`Web`, `Music`, `WebEmbedded`, `AndroidVr`, `Tv`, `Ios`, `Android`), interactive progress bars, and queue management.
+- 🛡️ **Permission & Guild Security Auditing**: Real-time identification of dangerous permission allocations (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`) and privilege escalation risks via `/audit`.
+- 📚 **PostgreSQL Community Wiki**: Integrated security knowledgebase and audit logging powered by HikariCP connection pooling (`/wikiadd`).
+- ⚡ **Async Virtual Thread Architecture**: Non-blocking event loop running on Java 26 Virtual Threads for ultra-low latency gateway responsiveness under heavy server load.
 
 For complete documentation on all bot commands and usage, see the **[Commands Guide](COMMANDS.md)**.
 
@@ -29,13 +29,13 @@ For complete documentation on all bot commands and usage, see the **[Commands Gu
 ## 🏗️ Architecture & Package Structure
 
 ```
-org.cyberheaven/
+org.ashcrest/
 ├── core/             # AegisBot core, Virtual Threads executor & config
-├── commands/         # Modular command pattern (audit, status, etc.)
+├── commands/         # Modular command pattern (audit, ashcrest, status, ask, hack, profile, leaderboard, daily)
 │   └── music/        # Voice channel music commands (play, skip, stop, queue, etc.)
-├── music/            # Lavaplayer audio engine, Apple Music resolver & scheduler
+├── music/            # Lavaplayer audio engine, DAVE protocol config, Apple Music resolver & scheduler
 ├── security/         # Security audit, permission analysis & anti-raid engine
-├── db/               # PostgreSQL DatabaseManager & HikariCP pool
+├── db/               # PostgreSQL DatabaseManager, EconomyManager & HikariCP pool
 └── Main.java         # Bot initialization & lifecycle manager
 ```
 
@@ -57,7 +57,7 @@ For complete detailed installation, environment setup, and Discord developer por
 
 ```bash
 # 1. Clone
-git clone https://github.com/Cyberheaven/Aegis.git
+git clone https://github.com/AshcrestHQ/Aegis.git
 cd Aegis
 
 # 2. Configuration
@@ -66,7 +66,7 @@ cp .env.example .env
 
 # 3. Build & Run
 mvn clean package
-java --enable-preview -jar target/aegis-2.1.0.jar
+java --enable-preview -jar target/aegis-3.0.0.jar
 ```
 
 ---
@@ -78,7 +78,7 @@ Released under the **MIT License**.
 ```
 MIT License
 
-Copyright (c) 2026 CyberHeaven
+Copyright (c) 2026 AshcrestHQ
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
