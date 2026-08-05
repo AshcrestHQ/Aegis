@@ -96,6 +96,11 @@ public class AegisBot {
         registerCommand(new HashIdCommand());
         registerCommand(new IpLookupCommand());
         registerCommand(new PasswordStrengthCommand());
+        registerCommand(new BreachCommand());
+        registerCommand(new BlacklistCommand());
+        registerCommand(new PhishCheckCommand());
+        registerCommand(new CveCommand());
+        registerCommand(new SubdomainsCommand());
 
         // AI Suite
         registerCommand(new ChatCommand());
@@ -216,6 +221,16 @@ public class AegisBot {
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "ip", "Target IP address", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("passwordstrength", "Ephemerally test password entropy")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "password", "Target password", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("breach", "Check if an email address has been compromised in data breaches")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "email", "Target email address", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("blacklist", "Perform passive DNSBL blacklist lookup against Spamhaus & RBLs")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "target", "Target IP or domain", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("phishcheck", "Check URL against Google Safe Browsing threat list")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "url", "Target URL", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("cve", "Lookup CVE details, CVSS scores, and NVD report")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "id", "CVE ID (e.g. CVE-2024-3094)", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("subdomains", "Enumerate subdomains via Certificate Transparency logs (crt.sh)")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "domain", "Target domain", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("chat", "Stateful AI conversation context via Gemini 3.6 Flash")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "message", "User message", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("summarize", "Summarize text into key takeaways")

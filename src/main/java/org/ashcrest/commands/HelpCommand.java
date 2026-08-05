@@ -35,7 +35,7 @@ public class HelpCommand implements ICommand {
                         Welcome to **Aegis**! A universal Discord operations bot powered by **Java 26 Virtual Threads**.
                         Use the **Select Menu** below to navigate commands across categories:
                         
-                        🛡️ **Security Recon & Audit**: `/dnsscan`, `/headers`, `/ssl`, `/securitytxt`, `/hashid`, `/iplookup`, `/passwordstrength`, `/audit`
+                        🛡️ **Security Recon & Audit**: `/dnsscan`, `/headers`, `/ssl`, `/securitytxt`, `/hashid`, `/iplookup`, `/passwordstrength`, `/breach`, `/blacklist`, `/phishcheck`, `/cve`, `/subdomains`, `/audit`
                         🔨 **Moderation Engine**: `/warn`, `/warnings`, `/mute`, `/unmute`, `/kick`, `/ban`, `/modlogs`, `/purge`, `/slowmode`, `/lockdown`
                         🚨 **Anti-Raid & Onboarding**: `/raidmode`, `/verify`, `/automod`, `/report`, `/config`
                         🤖 **AI Assistant**: `/ask`, `/chat`, `/summarize`, `/translate`, `/explain`, `/code`

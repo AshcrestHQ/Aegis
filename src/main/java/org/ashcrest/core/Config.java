@@ -15,6 +15,10 @@ public class Config {
     public static final String GEMINI_API_KEY = getEnvOrDefault("GEMINI_API_KEY", "");
     public static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent";
 
+    public static final String HIBP_API_KEY = getEnvOrDefault("HIBP_API_KEY", "");
+    public static final String GOOGLE_SAFE_BROWSING_API_KEY = getEnvOrDefault("GOOGLE_SAFE_BROWSING_API_KEY", "");
+    public static final String NVD_API_KEY = getEnvOrDefault("NVD_API_KEY", "");
+
     public static final String DB_HOST = getEnvOrDefault("DB_HOST", "localhost");
     public static final String DB_PORT = getEnvOrDefault("DB_PORT", "5432");
     public static final String DB_NAME = getEnvOrDefault("DB_NAME", "ashcrest_aegis");

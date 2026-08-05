@@ -289,6 +289,11 @@ public class CommandListener extends ListenerAdapter {
                         .addField("`/hashid <hash>`", "Identify probable hash algorithm (MD5, SHA-1, SHA-256, bcrypt, etc.)", false)
                         .addField("`/iplookup <ip>`", "Passive IP geolocation and ASN provider registry lookup", false)
                         .addField("`/passwordstrength`", "Ephemerally test password bit entropy and brute-force resistance (never logged)", false)
+                        .addField("`/breach <email>`", "Check if an email address has been compromised in data breaches (HIBP API)", false)
+                        .addField("`/blacklist <ip|domain>`", "Perform passive DNSBL blacklist lookup against Spamhaus & RBLs", false)
+                        .addField("`/phishcheck <url>`", "Check URL against Google Safe Browsing threat list", false)
+                        .addField("`/cve <id>`", "Lookup CVE vulnerability details, CVSS scores, and NVD report", false)
+                        .addField("`/subdomains <domain>`", "Enumerate subdomains passively via Certificate Transparency logs (crt.sh)", false)
                         .addField("`/audit`", "Audit server roles, administrator privileges, and risk misconfigurations", false);
 
                 case "help_mod" -> embed.setTitle("🔨 Moderation Engine Commands")

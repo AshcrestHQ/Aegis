@@ -17,6 +17,11 @@ Welcome to the master command directory for **AshcrestHQ Aegis**. All commands s
 | `hashid` | `!hashid <hash>` or `/hashid hash:<string>` | Identify probable cryptographic hash algorithm (MD5, SHA-1, SHA-256, bcrypt, etc.). |
 | `iplookup` | `!iplookup <ip>` or `/iplookup ip:<string>` | Passive IP geolocation and ASN provider registry lookup. |
 | `passwordstrength` | `/passwordstrength password:<string>` | Ephemerally test password bit entropy and brute-force resistance (never logged or saved). |
+| `breach` | `!breach <email>` or `/breach email:<string>` | Check if an email address has been compromised in known data breaches (HaveIBeenPwned API key required). |
+| `blacklist` | `!blacklist <ip\|domain>` or `/blacklist target:<string>` | Perform passive DNSBL blacklist lookup against Spamhaus & public RBL zones. |
+| `phishcheck` | `!phishcheck <url>` or `/phishcheck url:<string>` | Check URL against Google Safe Browsing threat list (Google Safe Browsing API key required). |
+| `cve` | `!cve <id>` or `/cve id:<string>` | Lookup CVE vulnerability details, CVSS severity scores, and description from NVD. |
+| `subdomains` | `!subdomains <domain>` or `/subdomains domain:<string>` | Enumerate subdomains passively via public Certificate Transparency logs (crt.sh). |
 | `audit` | `!audit` or `/audit` | Audit server roles, elevated administrator privileges, and misconfigurations. |
 
 ---
