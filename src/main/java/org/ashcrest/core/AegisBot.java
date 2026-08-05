@@ -221,6 +221,8 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ban", "Ban member")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "User to ban", true)
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("unban", "Unban user by ID")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "user_id", "Target User ID", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("modlogs", "View full moderation case history for a user")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Target member", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("purge", "Bulk delete recent channel messages")
@@ -232,6 +234,8 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("raidmode", "Toggle anti-raid verification level lock")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN, "enabled", "Enable or disable raidmode", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("verify", "Post button-based human verification gate"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("automod", "Enable or disable chat AutoMod filter")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN, "enabled", "Enable or disable AutoMod", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("report", "Report a member to server moderators")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Reported member", true)
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason", true),

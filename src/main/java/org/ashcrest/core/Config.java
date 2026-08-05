@@ -9,7 +9,7 @@ public class Config {
     private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
     public static final String DISCORD_TOKEN = getEnv("DISCORD_TOKEN");
-    public static final String BOT_PREFIX = getEnvOrDefault("BOT_PREFIX", "!");
+    public static final String BOT_PREFIX = getEnvOrDefault("BOT_PREFIX", "/");
     public static final String BOT_STATUS = getEnvOrDefault("BOT_STATUS", "🛡️ Aegis | Ashcrest Operations");
 
     public static final String GEMINI_API_KEY = getEnvOrDefault("GEMINI_API_KEY", "");
