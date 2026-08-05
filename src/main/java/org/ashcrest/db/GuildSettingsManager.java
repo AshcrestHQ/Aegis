@@ -4,6 +4,7 @@ import org.ashcrest.core.Config;
 
 import java.sql.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.Executors;
 public class GuildSettingsManager {
     private static volatile GuildSettingsManager instance;
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+    private final ConcurrentHashMap<Long, String> prefixCache = new ConcurrentHashMap<>();
 
     private GuildSettingsManager() {}
 
@@ -41,6 +43,7 @@ public class GuildSettingsManager {
             long welcomeChannelId,
             String welcomeMessage,
             long autoroleId,
+            long unverifiedRoleId,
             boolean automodEnabled,
             int automodSpamThreshold,
             String automodBannedWords,
@@ -49,6 +52,15 @@ public class GuildSettingsManager {
         public String getEffectivePrefix() {
             return (prefixOverride != null && !prefixOverride.trim().isEmpty()) ? prefixOverride : Config.BOT_PREFIX;
         }
+    }
+
+    public String getPrefix(long guildId) {
+        if (prefixCache.containsKey(guildId)) {
+            return prefixCache.get(guildId);
+        }
+        // Asynchronously fetch and populate cache; return default in flight
+        getSettings(guildId);
+        return Config.BOT_PREFIX;
     }
 
     public CompletableFuture<GuildSettings> getSettings(long guildId) {
@@ -85,7 +97,7 @@ public class GuildSettingsManager {
                 System.err.println("Error fetching guild settings for guild " + guildId + ": " + e.getMessage());
             }
 
-            return new GuildSettings(guildId, 0L, 0L, "Welcome {user} to {server}!", 0L, false, 5, "", null);
+            return new GuildSettings(guildId, 0L, 0L, "Welcome {user} to {server}!", 0L, 0L, false, 5, "", null);
         }, executor);
     }
 
@@ -105,6 +117,10 @@ public class GuildSettingsManager {
         return updateField(guildId, "autorole_id", roleId);
     }
 
+    public CompletableFuture<Boolean> updateUnverifiedRole(long guildId, long roleId) {
+        return updateField(guildId, "unverified_role_id", roleId);
+    }
+
     public CompletableFuture<Boolean> updateAutoMod(long guildId, boolean enabled) {
         return updateField(guildId, "automod_enabled", enabled);
     }
@@ -118,6 +134,7 @@ public class GuildSettingsManager {
     }
 
     public CompletableFuture<Boolean> updatePrefix(long guildId, String prefix) {
+        prefixCache.put(guildId, (prefix != null && !prefix.trim().isEmpty()) ? prefix : Config.BOT_PREFIX);
         return updateField(guildId, "prefix_override", prefix);
     }
 
@@ -140,16 +157,26 @@ public class GuildSettingsManager {
     }
 
     private GuildSettings mapRowToSettings(ResultSet rs) throws SQLException {
+        long guildId = rs.getLong("guild_id");
+        long unverifiedRole = 0L;
+        try {
+            unverifiedRole = rs.getLong("unverified_role_id");
+        } catch (SQLException ignored) {}
+
+        String prefix = rs.getString("prefix_override");
+        prefixCache.put(guildId, (prefix != null && !prefix.trim().isEmpty()) ? prefix : Config.BOT_PREFIX);
+
         return new GuildSettings(
-                rs.getLong("guild_id"),
+                guildId,
                 rs.getLong("mod_log_channel_id"),
                 rs.getLong("welcome_channel_id"),
                 rs.getString("welcome_message"),
                 rs.getLong("autorole_id"),
+                unverifiedRole,
                 rs.getBoolean("automod_enabled"),
                 rs.getInt("automod_spam_threshold"),
                 rs.getString("automod_banned_words"),
-                rs.getString("prefix_override")
+                prefix
         );
     }
 }

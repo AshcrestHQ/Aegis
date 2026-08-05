@@ -1,20 +1,29 @@
 package org.ashcrest.commands;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.awt.Color;
 import java.time.Instant;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 /**
  * Fun Utility Commands (Coinflip, Roll, 8Ball, Joke, Meme).
  */
 public class FunCommands implements ICommand {
     private static final Random random = new Random();
+    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final List<String> EIGHT_BALL_ANSWERS = List.of(
             "It is certain.", "It is decidedly so.", "Without a doubt.", "Yes definitely.",
@@ -30,12 +39,6 @@ public class FunCommands implements ICommand {
             "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?'",
             "Why was the JavaScript developer sad? Because he didn't Know how to 'null' his feelings.",
             "An optimist says the glass is half full. A pessimist says the glass is half empty. A programmer says the glass is twice as large as necessary."
-    );
-
-    private static final List<String> MEMES = List.of(
-            "https://i.imgur.com/W3gWj6a.png",
-            "https://i.imgur.com/31A5Q2x.png",
-            "https://i.imgur.com/x0Rk0gX.png"
     );
 
     @Override
@@ -66,15 +69,10 @@ public class FunCommands implements ICommand {
                 String joke = JOKES.get(random.nextInt(JOKES.size()));
                 event.getChannel().sendMessage("😄 " + joke).queue();
             }
-            case "meme" -> {
-                String memeUrl = MEMES.get(random.nextInt(MEMES.size()));
-                EmbedBuilder embed = new EmbedBuilder()
-                        .setTitle("🎭 Cyber Meme")
-                        .setImage(memeUrl)
-                        .setColor(new Color(0x9B59B6))
-                        .setTimestamp(Instant.now());
-                event.getChannel().sendMessageEmbeds(embed.build()).queue();
-            }
+            case "meme" -> fetchMemeAndSend(
+                    embed -> event.getChannel().sendMessageEmbeds(embed.build()).queue(),
+                    () -> event.getChannel().sendMessage("⚠️ Couldn't fetch a meme right now, try again.").queue()
+            );
         }
     }
 
@@ -103,15 +101,49 @@ public class FunCommands implements ICommand {
                 event.reply("😄 " + joke).queue();
             }
             case "meme" -> {
-                String memeUrl = MEMES.get(random.nextInt(MEMES.size()));
-                EmbedBuilder embed = new EmbedBuilder()
-                        .setTitle("🎭 Cyber Meme")
-                        .setImage(memeUrl)
-                        .setColor(new Color(0x9B59B6))
-                        .setTimestamp(Instant.now());
-                event.replyEmbeds(embed.build()).queue();
+                event.deferReply().queue();
+                fetchMemeAndSend(
+                        embed -> event.getHook().sendMessageEmbeds(embed.build()).queue(),
+                        () -> event.getHook().sendMessage("⚠️ Couldn't fetch a meme right now, try again.").queue()
+                );
             }
         }
+    }
+
+    private void fetchMemeAndSend(Consumer<EmbedBuilder> callback, Runnable onError) {
+        Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
+            try {
+                Request request = new Request.Builder()
+                        .url("https://meme-api.com/gimme/ProgrammerHumor")
+                        .header("User-Agent", "AshcrestAegis/3.0")
+                        .build();
+
+                try (Response response = httpClient.newCall(request).execute()) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        JsonNode json = objectMapper.readTree(response.body().string());
+                        String title = json.path("title").asText("Cyber Meme");
+                        String imageUrl = json.path("url").asText();
+                        String postLink = json.path("postLink").asText("https://reddit.com/r/ProgrammerHumor");
+                        String author = json.path("author").asText("Reddit");
+                        String subreddit = json.path("subreddit").asText("ProgrammerHumor");
+
+                        if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+                            EmbedBuilder embed = new EmbedBuilder()
+                                    .setTitle("🎭 " + title, postLink)
+                                    .setImage(imageUrl)
+                                    .setColor(new Color(0x9B59B6))
+                                    .setFooter("r/" + subreddit + " • Posted by u/" + author, null)
+                                    .setTimestamp(Instant.now());
+                            callback.accept(embed);
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Meme API error: " + e.getMessage());
+            }
+            onError.run();
+        });
     }
 
     @Override

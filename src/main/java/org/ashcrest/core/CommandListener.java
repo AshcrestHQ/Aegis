@@ -38,7 +38,7 @@ public class CommandListener extends ListenerAdapter {
         AutoModService.processMessage(event);
 
         String content = event.getMessage().getContentRaw();
-        String prefix = Config.BOT_PREFIX;
+        String prefix = event.isFromGuild() ? GuildSettingsManager.getInstance().getPrefix(event.getGuild().getIdLong()) : Config.BOT_PREFIX;
 
         if (!content.startsWith(prefix)) return;
 
@@ -61,7 +61,12 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         String rawName = event.getName();
-        final String commandName = "aegis".equalsIgnoreCase(rawName) ? "source" : rawName;
+        final String commandName = switch (rawName.toLowerCase()) {
+            case "aegis" -> "source";
+            case "unlock" -> "lockdown";
+            case "unban" -> "ban";
+            default -> rawName;
+        };
         ICommand command = bot.getCommand(commandName);
 
         if (command != null && command.supportsSlash()) {
@@ -81,8 +86,13 @@ public class CommandListener extends ListenerAdapter {
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         long guildId = event.getGuild().getIdLong();
         GuildSettingsManager.getInstance().getSettings(guildId).thenAccept(settings -> {
-            // 1. Autorole
-            if (settings.autoroleId() > 0) {
+            // 1. Verification Gate & Autorole
+            if (settings.unverifiedRoleId() > 0) {
+                Role unverifiedRole = event.getGuild().getRoleById(settings.unverifiedRoleId());
+                if (unverifiedRole != null) {
+                    event.getGuild().addRoleToMember(event.getMember(), unverifiedRole).queue(null, throwable -> {});
+                }
+            } else if (settings.autoroleId() > 0) {
                 Role role = event.getGuild().getRoleById(settings.autoroleId());
                 if (role != null) {
                     event.getGuild().addRoleToMember(event.getMember(), role).queue(null, throwable -> {});
@@ -187,6 +197,12 @@ public class CommandListener extends ListenerAdapter {
             if (!event.isFromGuild() || event.getMember() == null) return;
             long guildId = event.getGuild().getIdLong();
             GuildSettingsManager.getInstance().getSettings(guildId).thenAccept(settings -> {
+                if (settings.unverifiedRoleId() > 0) {
+                    Role unverifiedRole = event.getGuild().getRoleById(settings.unverifiedRoleId());
+                    if (unverifiedRole != null) {
+                        event.getGuild().removeRoleFromMember(event.getMember(), unverifiedRole).queue(null, err -> {});
+                    }
+                }
                 if (settings.autoroleId() > 0) {
                     Role role = event.getGuild().getRoleById(settings.autoroleId());
                     if (role != null) {
@@ -313,9 +329,18 @@ public class CommandListener extends ListenerAdapter {
                         .setColor(new Color(0xFF6B00))
                         .addField("`/raidmode <on|off>`", "Lock verification level to Highest during active raid attacks", false)
                         .addField("`/verify`", "Post button-based human verification gate for new joins", false)
-                        .addField("`/automod`", "Manage banned words filter and chat spam rate limits", false)
+                        .addField("`/automod <on|off>`", "Enable or disable chat AutoMod filter", false)
                         .addField("`/report <@user> <reason>`", "Report user to moderators via moderation log channel", false)
-                        .addField("`/config`", "Configure modlog, welcome channel/message, autorole, and automod settings", false);
+                        .addField("`/config view`", "View current guild configuration embed", false)
+                        .addField("`/config modlog #channel`", "Set moderation log audit channel", false)
+                        .addField("`/config welcome-channel #channel`", "Set welcome message channel", false)
+                        .addField("`/config welcome-message <text>`", "Set welcome text (`{user}` & `{server}` supported)", false)
+                        .addField("`/config autorole @role`", "Set role auto-assigned on join or post-verification", false)
+                        .addField("`/config unverified-role @role`", "Set holding role assigned on join before verification", false)
+                        .addField("`/config automod on|off`", "Toggle AutoMod spam & word filtering", false)
+                        .addField("`/config spam-threshold <count>`", "Set max message frequency per interval", false)
+                        .addField("`/config banned-words <list>`", "Set comma-separated banned words list", false)
+                        .addField("`/config prefix <symbol>`", "Set per-guild command prefix override", false);
 
                 case "help_ai" -> embed.setTitle("🤖 AI Assistant Suite (Google Gemini 3.6 Flash)")
                         .setColor(new Color(0x4285F4))

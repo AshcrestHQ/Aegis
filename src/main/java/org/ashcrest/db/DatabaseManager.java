@@ -97,11 +97,13 @@ public class DatabaseManager {
                     welcome_channel_id BIGINT DEFAULT 0,
                     welcome_message TEXT DEFAULT 'Welcome {user} to {server}!',
                     autorole_id BIGINT DEFAULT 0,
+                    unverified_role_id BIGINT DEFAULT 0,
                     automod_enabled BOOLEAN DEFAULT FALSE,
                     automod_spam_threshold INT DEFAULT 5,
                     automod_banned_words TEXT DEFAULT '',
                     prefix_override VARCHAR(10) DEFAULT NULL
                 );
+                ALTER TABLE guild_settings ADD COLUMN IF NOT EXISTS unverified_role_id BIGINT DEFAULT 0;
                 """;
             try (Statement stmt = conn.createStatement()) {
                 stmt.execute(createGuildSettingsTable);

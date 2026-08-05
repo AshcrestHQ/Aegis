@@ -175,7 +175,29 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("wikiadd", "Add or update an entry in the community security wiki")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "keyword", "Wiki topic keyword", true)
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "content", "Wiki content body", true),
-                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("config", "Configure Aegis server settings"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("config", "Configure Aegis server settings")
+                        .addSubcommands(
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("view", "View current configuration"),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("modlog", "Set moderation log channel")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.CHANNEL, "channel", "Target channel", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("welcome-channel", "Set welcome channel")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.CHANNEL, "channel", "Target channel", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("welcome-message", "Set welcome message ({user}/{server} supported)")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "message", "Welcome message text", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("autorole", "Set auto-assigned role on join")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.ROLE, "role", "Role to assign", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("unverified-role", "Set unverified role for join verification gate")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.ROLE, "role", "Role to assign on join before verification", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("automod", "Enable or disable AutoMod")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN, "enabled", "On or off", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("spam-threshold", "Set AutoMod spam message threshold")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "count", "Messages per interval before flagging", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("banned-words", "Set AutoMod banned word list (comma-separated)")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "words", "Comma-separated banned words", true),
+                                new net.dv8tion.jda.api.interactions.commands.build.SubcommandData("prefix", "Set a per-guild command prefix override")
+                                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "prefix", "New prefix (e.g. ?)", true)
+                        )
+                        .setDefaultPermissions(net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions.enabledFor(net.dv8tion.jda.api.Permission.MANAGE_SERVER)),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("warn", "Warn a server member")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Member to warn", true)
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason for warning", true),

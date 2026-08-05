@@ -48,10 +48,19 @@ Welcome to the master command directory for **AshcrestHQ Aegis**. All commands s
 | Command | Usage | Description |
 | :--- | :--- | :--- |
 | `raidmode` | `!raidmode on\|off` or `/raidmode enabled:<boolean>` | Lock server verification level to Highest during active raid attacks. |
-| `verify` | `!verify` or `/verify` | Post button-based human verification gate for new member onboarding. |
-| `automod` | `!automod banned-words add <word>` or `/automod` | Manage banned words filter and chat spam flood rate limits. |
+| `verify` | `!verify` or `/verify` | Post button-based human verification gate for new member onboarding. *(Note: If `/config unverified-role` is set, members receive the unverified holding role on join; clicking Verify swaps it for the `autorole` member role. Ensure server channel permissions restrict the unverified role).* |
+| `automod` | `!automod on\|off` or `/config automod enabled:<boolean>` | Enable or disable chat AutoMod banned words & spam flood rate limits. |
 | `report` | `!report <@user> <reason>` or `/report user:<user> reason:<text>` | Report a user to server moderators via mod log channel. |
-| `config` | `!config view` or `/config` | Manage per-guild settings (modlog channel, welcome channel/message, autorole, automod). |
+| `config view` | `!config view` or `/config view` | Display active per-guild configuration embed. |
+| `config modlog` | `!config modlog #channel` or `/config modlog channel:<channel>` | Set channel for moderation logs and audit events. |
+| `config welcome-channel` | `!config welcome-channel #channel` or `/config welcome-channel channel:<channel>` | Set channel for member join welcome messages. |
+| `config welcome-message` | `!config welcome-message <text>` or `/config welcome-message message:<string>` | Set custom welcome text (`{user}` & `{server}` placeholders supported). |
+| `config autorole` | `!config autorole @role` or `/config autorole role:<role>` | Set member role auto-assigned on join or granted post-verification. |
+| `config unverified-role` | `!config unverified-role @role` or `/config unverified-role role:<role>` | Set holding role assigned on join before verification button click. |
+| `config automod` | `!config automod on\|off` or `/config automod enabled:<boolean>` | Enable or disable AutoMod spam & word filtering. |
+| `config spam-threshold` | `!config spam-threshold <n>` or `/config spam-threshold count:<int>` | Set maximum message count per rate interval before AutoMod flags. |
+| `config banned-words` | `!config banned-words <list>` or `/config banned-words words:<string>` | Set comma-separated list of banned words for AutoMod filter. |
+| `config prefix` | `!config prefix <symbol>` or `/config prefix prefix:<string>` | Set per-guild command prefix override (e.g. `?` or `.`). |
 
 ---
 
