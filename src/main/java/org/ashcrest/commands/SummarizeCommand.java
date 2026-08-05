@@ -52,7 +52,7 @@ public class SummarizeCommand implements ICommand {
                     .setTitle("📝 Text Summarization")
                     .setColor(new Color(0x00FFC8))
                     .setDescription(summary.length() > 3900 ? summary.substring(0, 3897) + "..." : summary)
-                    .setFooter("Powered by Google Gemini 3.6 Flash", null)
+                    .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
                     .setTimestamp(Instant.now());
             event.getHook().sendMessageEmbeds(embed.build()).queue();
         });
@@ -83,7 +83,7 @@ public class SummarizeCommand implements ICommand {
                 .setTitle("📝 Text Summarization")
                 .setColor(new Color(0x00FFC8))
                 .setDescription(summary.length() > 3900 ? summary.substring(0, 3897) + "..." : summary)
-                .setFooter("Powered by Google Gemini 3.6 Flash", null)
+                .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
                 .setTimestamp(Instant.now());
         channel.sendMessageEmbeds(embed.build()).queue();
     }

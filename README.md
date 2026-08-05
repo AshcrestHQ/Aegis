@@ -1,7 +1,9 @@
 # 🛡️ Aegis - AshcrestHQ Universal Discord Operations Bot
 
 > **Universal Discord Bot for Security, Community Operations, Cyber RPG, AI & VC Audio.**
-> Aegis is a high-performance, public Discord bot built with **Java 26** and **Virtual Threads**, engineered for server protection, anti-raid monitoring, permission auditing, community security wiki, interactive Cyber RPG mini-games, Google Gemini AI assistant, and full VC music playback.
+> Aegis is a high-performance, public Discord bot built with **Java 26** and **Virtual Threads**, engineered for server protection, anti-raid monitoring, permission auditing, community security wiki, interactive Cyber RPG mini-games, Google Gemini 3.6 Flash AI assistant, and full VC music playback.
+> 
+> 🔗 **[Click Here to Invite Aegis to Your Discord Server](https://discord.com/oauth2/authorize?client_id=1497620745604563096&permissions=824938978566&integration_type=0&scope=applications.commands+bot)**
 
 ---
 

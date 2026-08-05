@@ -53,7 +53,7 @@ public class ExplainCommand implements ICommand {
                     .setColor(new Color(0xFFD700))
                     .addField("❓ Query", query.length() > 250 ? query.substring(0, 247) + "..." : query, false)
                     .setDescription(explanation.length() > 3800 ? explanation.substring(0, 3797) + "..." : explanation)
-                    .setFooter("Powered by Google Gemini 3.6 Flash", null)
+                    .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
                     .setTimestamp(Instant.now());
             event.getHook().sendMessageEmbeds(embed.build()).queue();
         });
@@ -85,7 +85,7 @@ public class ExplainCommand implements ICommand {
                 .setColor(new Color(0xFFD700))
                 .addField("❓ Query", query.length() > 250 ? query.substring(0, 247) + "..." : query, false)
                 .setDescription(explanation.length() > 3800 ? explanation.substring(0, 3797) + "..." : explanation)
-                .setFooter("Powered by Google Gemini 3.6 Flash", null)
+                .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
                 .setTimestamp(Instant.now());
         channel.sendMessageEmbeds(embed.build()).queue();
     }

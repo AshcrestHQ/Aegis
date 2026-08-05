@@ -317,14 +317,15 @@ public class CommandListener extends ListenerAdapter {
                         .addField("`/report <@user> <reason>`", "Report user to moderators via moderation log channel", false)
                         .addField("`/config`", "Configure modlog, welcome channel/message, autorole, and automod settings", false);
 
-                case "help_ai" -> embed.setTitle("🤖 AI Assistant Suite (Gemini 3.6 Flash)")
-                        .setColor(new Color(0x7289DA))
+                case "help_ai" -> embed.setTitle("🤖 AI Assistant Suite (Google Gemini 3.6 Flash)")
+                        .setColor(new Color(0x4285F4))
                         .addField("`/ask <prompt>`", "Stateless single-shot Q&A assistant", false)
                         .addField("`/chat <message>`", "Stateful multi-turn conversation maintaining channel context", false)
                         .addField("`/summarize <text>`", "Summarize articles and long text into bulleted key takeaways", false)
                         .addField("`/translate <lang> <text>`", "Translate text into any target language", false)
                         .addField("`/explain <topic>`", "Explain complex technical concepts, errors, or code snippets", false)
-                        .addField("`/code <question>`", "Software engineering and programming Q&A assistant", false);
+                        .addField("`/code <question>`", "Software engineering and programming Q&A assistant", false)
+                        .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL);
 
                 case "help_rpg" -> embed.setTitle("🎮 Cyber RPG & Vault Economy")
                         .setColor(new Color(0x57F287))

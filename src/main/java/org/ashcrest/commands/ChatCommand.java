@@ -113,7 +113,7 @@ public class ChatCommand implements ICommand {
                 .setColor(new Color(0x7289DA))
                 .addField("💬 Prompt", prompt.length() > 250 ? prompt.substring(0, 247) + "..." : prompt, false)
                 .setDescription(answer.length() > 3900 ? answer.substring(0, 3897) + "..." : answer)
-                .setFooter("Powered by Google Gemini 3.6 Flash | Channel Context Enabled", null)
+                .setFooter("Powered by Google Gemini 3.6 Flash | Channel Context Enabled", Config.GEMINI_LOGO_URL)
                 .setTimestamp(Instant.now());
 
         channel.sendMessageEmbeds(embed.build()).queue();
@@ -125,7 +125,7 @@ public class ChatCommand implements ICommand {
                 .setColor(new Color(0x7289DA))
                 .addField("💬 Prompt", prompt.length() > 250 ? prompt.substring(0, 247) + "..." : prompt, false)
                 .setDescription(answer.length() > 3900 ? answer.substring(0, 3897) + "..." : answer)
-                .setFooter("Powered by Google Gemini 3.6 Flash | Channel Context Enabled", null)
+                .setFooter("Powered by Google Gemini 3.6 Flash | Channel Context Enabled", Config.GEMINI_LOGO_URL)
                 .setTimestamp(Instant.now());
 
         event.getHook().sendMessageEmbeds(embed.build()).queue();

@@ -125,18 +125,18 @@ public class AskCommand implements ICommand {
         }
 
         return new EmbedBuilder()
-                .setTitle("✨ Aegis AI Assistant", "https://cyberheaven.org")
+                .setTitle("✨ Aegis AI Assistant")
                 .addField("❓ Prompt", "`" + truncatedPrompt + "`", false)
                 .setDescription(truncatedAnswer)
                 .setColor(new Color(66, 133, 244)) // Google Blue
-                .setFooter("Powered by Google Gemini 2.5 Flash • CyberHeaven Aegis", "https://cdn.discordapp.com/embed/avatars/0.png");
+                .setFooter("Powered by Google Gemini 3.6 Flash • AshcrestHQ Aegis", Config.GEMINI_LOGO_URL);
     }
 
     @Override
     public String getName() { return "ask"; }
 
     @Override
-    public String getDescription() { return "Ask Aegis AI (powered by Google Gemini 2.5 Flash)"; }
+    public String getDescription() { return "Ask Aegis AI (powered by Google Gemini 3.6 Flash)"; }
 
     @Override
     public String getUsage() { return "!ask <question | prompt>"; }

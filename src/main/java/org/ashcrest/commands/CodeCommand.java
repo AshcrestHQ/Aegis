@@ -53,7 +53,7 @@ public class CodeCommand implements ICommand {
                     .setColor(new Color(0x9B59B6))
                     .addField("❓ Question", question.length() > 250 ? question.substring(0, 247) + "..." : question, false)
                     .setDescription(answer.length() > 3800 ? answer.substring(0, 3797) + "..." : answer)
-                    .setFooter("Powered by Google Gemini 3.6 Flash | Software Engineering Q&A", null)
+                    .setFooter("Powered by Google Gemini 3.6 Flash | Software Engineering Q&A", Config.GEMINI_LOGO_URL)
                     .setTimestamp(Instant.now());
             event.getHook().sendMessageEmbeds(embed.build()).queue();
         });
@@ -85,7 +85,7 @@ public class CodeCommand implements ICommand {
                 .setColor(new Color(0x9B59B6))
                 .addField("❓ Question", q.length() > 250 ? q.substring(0, 247) + "..." : q, false)
                 .setDescription(answer.length() > 3800 ? answer.substring(0, 3797) + "..." : answer)
-                .setFooter("Powered by Google Gemini 3.6 Flash | Software Engineering Q&A", null)
+                .setFooter("Powered by Google Gemini 3.6 Flash | Software Engineering Q&A", Config.GEMINI_LOGO_URL)
                 .setTimestamp(Instant.now());
         channel.sendMessageEmbeds(embed.build()).queue();
     }

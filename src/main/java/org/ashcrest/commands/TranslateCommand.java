@@ -57,7 +57,7 @@ public class TranslateCommand implements ICommand {
                     .setTitle("🌐 Translation — " + targetLang)
                     .setColor(new Color(0x00A8FC))
                     .setDescription(translated)
-                    .setFooter("Powered by Google Gemini 3.6 Flash", null)
+                    .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
                     .setTimestamp(Instant.now());
             event.getHook().sendMessageEmbeds(embed.build()).queue();
         });
@@ -88,7 +88,7 @@ public class TranslateCommand implements ICommand {
                 .setTitle("🌐 Translation — " + lang)
                 .setColor(new Color(0x00A8FC))
                 .setDescription(text)
-                .setFooter("Powered by Google Gemini 3.6 Flash", null)
+                .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
                 .setTimestamp(Instant.now());
         channel.sendMessageEmbeds(embed.build()).queue();
     }

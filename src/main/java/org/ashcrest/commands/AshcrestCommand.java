@@ -28,7 +28,7 @@ public class AshcrestCommand implements ICommand {
                 .setDescription("Official hubs, documentation, public bot invite, and open-source repository for Ashcrest Aegis.")
                 .setColor(new Color(0x00A8FC))
                 .addField("💻 GitHub Repository", "[AshcrestHQ/Aegis](https://github.com/AshcrestHQ/Aegis)", false)
-                .addField("🤖 Public Bot Invite", "[Invite Aegis to Your Server](https://discord.com/oauth2/authorize?client_id=134567890&permissions=8&scope=bot%20applications.commands)", false)
+                .addField("🤖 Public Bot Invite", "[Invite Aegis to Your Server](" + org.ashcrest.core.Config.PUBLIC_INVITE_URL + ")", false)
                 .addField("🌐 Ashcrest Operations Hub", "[ashcrest.org](https://ashcrest.org)", false)
                 .addField("🎮 Cyber Operations RPG", "Use `/hack` to play the interactive penetration testing mini-game, `/profile` for stats, and `/leaderboard` for rankings!", false)
                 .setFooter("AshcrestHQ | Universal Discord Security, Operations & AI", null)

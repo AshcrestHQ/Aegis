@@ -36,7 +36,7 @@ Before setting up Aegis, make sure you have installed:
      - **General**: `Read Messages/View Channels`, `Manage Roles`, `Kick Members`, `Ban Members`
      - **Text**: `Send Messages`, `Embed Links`, `Attach Files`, `Read Message History`
      - **Voice**: `Connect`, `Speak`, `Use Voice Activity`
-   - Copy the generated URL and paste it into your browser to invite the bot to your Discord server.
+   - Copy the generated URL or click the official public invite link: **[Invite Aegis to Your Discord Server](https://discord.com/oauth2/authorize?client_id=1497620745604563096&permissions=824938978566&integration_type=0&scope=applications.commands+bot)**.
 
 ---
 
