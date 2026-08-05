@@ -21,12 +21,14 @@ import java.util.concurrent.Executors;
  */
 public class AegisBot {
     private static volatile JDA jdaInstance;
+    private static volatile AegisBot botInstance;
     private final JDA jda;
     private final Map<String, ICommand> commands = new HashMap<>();
     private final DatabaseManager dbManager;
     private final ExecutorService virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
     public AegisBot() {
+        botInstance = this;
         Config.validate();
         this.dbManager = DatabaseManager.getInstance();
 
@@ -47,6 +49,10 @@ public class AegisBot {
 
         jdaInstance = this.jda;
         registerCommands();
+    }
+
+    public static AegisBot getInstance() {
+        return botInstance;
     }
 
     public static JDA getJda() {
