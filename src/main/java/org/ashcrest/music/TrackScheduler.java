@@ -31,6 +31,17 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
+    @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        net.dv8tion.jda.api.JDA jda = org.ashcrest.core.AegisBot.getJda();
+        if (jda != null && track != null && track.getInfo() != null) {
+            String title = track.getInfo().title;
+            String author = track.getInfo().author;
+            String label = title + (author != null && !author.equalsIgnoreCase("Unknown author") ? " - " + author : "");
+            jda.getPresence().setActivity(net.dv8tion.jda.api.entities.Activity.listening(label));
+        }
+    }
+
     /**
      * Skip current track and play next in queue.
      */
@@ -41,6 +52,7 @@ public class TrackScheduler extends AudioEventAdapter {
             return true;
         } else {
             player.stopTrack();
+            resetPresence();
             return false;
         }
     }
@@ -59,6 +71,14 @@ public class TrackScheduler extends AudioEventAdapter {
     public void clearQueue() {
         queue.clear();
         player.stopTrack();
+        resetPresence();
+    }
+
+    private void resetPresence() {
+        net.dv8tion.jda.api.JDA jda = org.ashcrest.core.AegisBot.getJda();
+        if (jda != null) {
+            jda.getPresence().setActivity(net.dv8tion.jda.api.entities.Activity.watching("Ashcrest Operations"));
+        }
     }
 
     public AudioPlayer getPlayer() {

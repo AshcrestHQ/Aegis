@@ -45,7 +45,7 @@ public class AuditCommand implements ICommand {
             embed.addField("🚨 Warnings", String.join("\n", result.warningFlags()), false);
         }
 
-        embed.setFooter("CyberHeaven Aegis | Security Engineering")
+        embed.setFooter("AshcrestHQ Aegis | Security Engineering")
              .setTimestamp(java.time.Instant.now());
 
         return embed;

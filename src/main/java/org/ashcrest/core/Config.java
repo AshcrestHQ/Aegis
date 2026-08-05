@@ -13,7 +13,7 @@ public class Config {
     public static final String BOT_STATUS = getEnvOrDefault("BOT_STATUS", "🛡️ Aegis | Ashcrest Operations");
 
     public static final String GEMINI_API_KEY = getEnvOrDefault("GEMINI_API_KEY", "");
-    public static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+    public static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent";
 
     public static final String DB_HOST = getEnvOrDefault("DB_HOST", "localhost");
     public static final String DB_PORT = getEnvOrDefault("DB_PORT", "5432");

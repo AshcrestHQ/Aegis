@@ -16,7 +16,7 @@
 ## ⚡ Key Features
 
 - 🎮 **Interactive Cyber Breach RPG**: High-octane cyber security penetration testing mini-game (`/hack`, `/profile`, `/leaderboard`, `/daily`) featuring interactive Discord Buttons, tactical intrusion vectors, hacker rank progression (`Script Kiddie` → `Netrunner` → `Security Architect` → `Cyber Sovereign`), and PostgreSQL vault economy (`🪙`).
-- 🤖 **Google Gemini AI Assistant**: Native `/ask` command powered by Google Gemini 2.5 Flash API executing asynchronously on Java 26 Virtual Threads.
+- 🤖 **Google Gemini AI Assistant**: Native `/ask` command powered by Google Gemini 3.6 Flash API executing asynchronously on Java 26 Virtual Threads.
 - 🔒 **Discord Voice DAVE E2EE & Lavaplayer Audio**: Full-featured Voice Channel music engine supporting Discord's end-to-end voice encryption (DAVE/JDAVE protocol), Apple Music metadata resolution (`music.apple.com`), YouTube multi-client fallback pipeline (`Web`, `Music`, `WebEmbedded`, `AndroidVr`, `Tv`, `Ios`, `Android`), interactive progress bars, and queue management.
 - 🛡️ **Permission & Guild Security Auditing**: Real-time identification of dangerous permission allocations (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`) and privilege escalation risks via `/audit`.
 - 📚 **PostgreSQL Community Wiki**: Integrated security knowledgebase and audit logging powered by HikariCP connection pooling (`/wikiadd`).

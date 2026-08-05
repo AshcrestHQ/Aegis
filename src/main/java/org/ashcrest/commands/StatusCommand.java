@@ -34,7 +34,7 @@ public class StatusCommand implements ICommand {
                 .addField("⏱️ Uptime", String.format("%dd %dh %dm", duration.toDays(), duration.toHoursPart(), duration.toMinutesPart()), true)
                 .addField("☕ Java Version", System.getProperty("java.version"), true)
                 .addField("⚡ Virtual Threads", "Enabled (Java 26)", true)
-                .setFooter("CyberHeaven Aegis | Security Engineering")
+                .setFooter("AshcrestHQ Aegis | Security Operations")
                 .setTimestamp(java.time.Instant.now());
     }
 

@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
  * Main Aegis Bot core manager.
  */
 public class AegisBot {
+    private static volatile JDA jdaInstance;
     private final JDA jda;
     private final Map<String, ICommand> commands = new HashMap<>();
     private final DatabaseManager dbManager;
@@ -44,7 +45,12 @@ public class AegisBot {
                 .addEventListeners(new CommandListener(this))
                 .build();
 
+        jdaInstance = this.jda;
         registerCommands();
+    }
+
+    public static JDA getJda() {
+        return jdaInstance;
     }
 
     private void registerCommands() {
@@ -62,6 +68,49 @@ public class AegisBot {
         registerCommand(new ProfileCommand());
         registerCommand(new LeaderboardCommand());
         registerCommand(new DailyCommand());
+
+        // Config & Moderation
+        registerCommand(new ConfigCommand());
+        registerCommand(new org.ashcrest.commands.moderation.WarnCommand());
+        registerCommand(new org.ashcrest.commands.moderation.WarningsCommand());
+        registerCommand(new org.ashcrest.commands.moderation.MuteCommand());
+        registerCommand(new org.ashcrest.commands.moderation.UnmuteCommand());
+        registerCommand(new org.ashcrest.commands.moderation.KickCommand());
+        registerCommand(new org.ashcrest.commands.moderation.BanCommand());
+        registerCommand(new org.ashcrest.commands.moderation.ModLogsCommand());
+        registerCommand(new org.ashcrest.commands.moderation.PurgeCommand());
+        registerCommand(new org.ashcrest.commands.moderation.SlowmodeCommand());
+        registerCommand(new org.ashcrest.commands.moderation.LockdownCommand());
+
+        // Anti-Raid & Onboarding
+        registerCommand(new org.ashcrest.commands.antiraid.RaidModeCommand());
+        registerCommand(new org.ashcrest.commands.antiraid.VerifyCommand());
+        registerCommand(new org.ashcrest.commands.antiraid.AutoModCommand());
+        registerCommand(new org.ashcrest.commands.antiraid.ReportCommand());
+
+        // Security Recon
+        registerCommand(new DnsScanCommand());
+        registerCommand(new HeadersCommand());
+        registerCommand(new SslCommand());
+        registerCommand(new SecurityTxtCommand());
+        registerCommand(new HashIdCommand());
+        registerCommand(new IpLookupCommand());
+        registerCommand(new PasswordStrengthCommand());
+
+        // AI Suite
+        registerCommand(new ChatCommand());
+        registerCommand(new SummarizeCommand());
+        registerCommand(new TranslateCommand());
+        registerCommand(new ExplainCommand());
+        registerCommand(new CodeCommand());
+
+        // Fun Commands
+        FunCommands fun = new FunCommands();
+        registerCommand(fun);
+        commands.put("roll", fun);
+        commands.put("8ball", fun);
+        commands.put("joke", fun);
+        commands.put("meme", fun);
 
         // VC Music & Apple Music Commands
         registerCommand(new PlayCommand());
@@ -112,7 +161,7 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("cyberheaven", "View official links for CyberHeaven (alias)"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("source", "View open-source GitHub repository and MIT license info for Aegis"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("aegis", "View open-source GitHub repository and MIT license info for Aegis"),
-                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ask", "Ask Aegis AI (powered by Google Gemini 2.5 Flash)")
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ask", "Ask Aegis AI (powered by Google Gemini 3.6 Flash)")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "prompt", "The question or prompt for Gemini AI", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("hack", "Initiate interactive cyber penetration test mini-game for credits & XP"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("profile", "View your Ashcrest hacker rank, level, XP, credits, and hack stats"),
@@ -121,6 +170,70 @@ public class AegisBot {
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("wikiadd", "Add or update an entry in the community security wiki")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "keyword", "Wiki topic keyword", true)
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "content", "Wiki content body", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("config", "Configure Aegis server settings"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("warn", "Warn a server member")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Member to warn", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason for warning", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("warnings", "View member warnings")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Member to query", false),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("mute", "Timeout member")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Member to mute", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "minutes", "Duration in minutes", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason", false),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("unmute", "Remove timeout from member")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Member to unmute", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("kick", "Kick member")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Member to kick", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ban", "Ban member")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "User to ban", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("modlogs", "View full moderation case history for a user")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Target member", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("purge", "Bulk delete recent channel messages")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "count", "Number of messages to delete (1-100)", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("slowmode", "Set channel slowmode delay in seconds")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "seconds", "Slowmode seconds", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("lockdown", "Lockdown current channel for @everyone"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("unlock", "Unlock current channel for @everyone"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("raidmode", "Toggle anti-raid verification level lock")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN, "enabled", "Enable or disable raidmode", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("verify", "Post button-based human verification gate"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("report", "Report a member to server moderators")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "Reported member", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "reason", "Reason", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("dnsscan", "Audit domain DNS records, SPF, DMARC, DNSSEC")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "domain", "Target domain", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("headers", "Audit HTTP security response headers")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "url", "Target URL or domain", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ssl", "Audit TLS/SSL certificate validity and issuer")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "domain", "Target domain", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("securitytxt", "Audit domain RFC 9116 security.txt policy")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "domain", "Target domain", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("hashid", "Identify cryptographic hash algorithm")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "hash", "Target hash string", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("iplookup", "Passive IP geolocation and ASN lookup")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "ip", "Target IP address", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("passwordstrength", "Ephemerally test password entropy")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "password", "Target password", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("chat", "Stateful AI conversation context via Gemini 3.6 Flash")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "message", "User message", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("summarize", "Summarize text into key takeaways")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "text", "Content to summarize", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("translate", "Translate text into target language")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "target_lang", "Target language", true)
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "text", "Text to translate", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("explain", "Explain complex technical topics or code")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "topic", "Topic or code snippet", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("code", "Ask software engineering and coding Q&A questions")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "question", "Coding question", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("coinflip", "Flip a coin"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("roll", "Roll a die")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "sides", "Number of sides (default 6)", false),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("8ball", "Ask the Magic 8-Ball a question")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "question", "Question", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("joke", "Get a programming joke"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("meme", "Get a cyber meme"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("play", "Play audio in your VC (supports Apple Music, YouTube, direct audio URLs)")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "input", "Song title, URL, or Apple Music link", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("skip", "Skip the currently playing track"),

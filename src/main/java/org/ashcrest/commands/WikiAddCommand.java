@@ -92,7 +92,7 @@ public class WikiAddCommand implements ICommand {
                         .addField("🔑 Keyword", keyword, false)
                         .addField("📄 Content", content.length() > 1000 ? content.substring(0, 997) + "..." : content, false)
                         .addField("👤 Contributor", contributor, true)
-                        .setFooter("CyberHeaven Aegis | PostgreSQL Knowledge Base")
+                        .setFooter("AshcrestHQ Aegis | PostgreSQL Knowledge Base")
                         .setTimestamp(Instant.now());
 
                 event.getHook().sendMessageEmbeds(embed.build()).queue();

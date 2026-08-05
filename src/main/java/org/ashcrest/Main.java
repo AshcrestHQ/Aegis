@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("🛡️ Starting Aegis Security Bot (CyberHeaven)");
+        System.out.println("🛡️ Starting Aegis Bot (AshcrestHQ)");
         System.out.println("Java Version: " + System.getProperty("java.version"));
 
         AegisBot bot = null;
@@ -17,7 +17,7 @@ public class Main {
             bot = new AegisBot();
             bot.startAsync().get();
 
-            System.out.println("✅ Aegis Bot active & guarding CyberHeaven!");
+            System.out.println("✅ Aegis Bot active & guarding AshcrestHQ!");
             new CountDownLatch(1).await();
         } catch (Exception e) {
             System.err.println("❌ Aegis startup error: " + e.getMessage());

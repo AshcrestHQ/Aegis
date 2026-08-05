@@ -1,6 +1,8 @@
 package org.ashcrest.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -8,60 +10,65 @@ import java.awt.Color;
 import java.time.Instant;
 
 /**
- * Help command displaying categorized Aegis commands.
+ * Interactive Paginated Help Command for Ashcrest Aegis.
  */
 public class HelpCommand implements ICommand {
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
-        event.getChannel().sendMessageEmbeds(buildHelpEmbed().build()).queue();
+        event.getChannel().sendMessageEmbeds(buildOverviewEmbed().build())
+                .setComponents(ActionRow.of(buildCategorySelectMenu()))
+                .queue();
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        event.deferReply().queue();
-        event.getHook().sendMessageEmbeds(buildHelpEmbed().build()).queue();
+        event.replyEmbeds(buildOverviewEmbed().build())
+                .setComponents(ActionRow.of(buildCategorySelectMenu()))
+                .queue();
     }
 
-    private EmbedBuilder buildHelpEmbed() {
+    public static EmbedBuilder buildOverviewEmbed() {
         return new EmbedBuilder()
-                .setTitle("🛡️ Ashcrest Aegis Command Directory")
-                .setDescription("Universal Discord security, community operations, music, AI, and cyber RPG suite for AshcrestHQ.")
+                .setTitle("🛡️ Ashcrest Aegis — Master Command Index")
+                .setDescription("""
+                        Welcome to **Aegis**! A universal Discord operations bot powered by **Java 26 Virtual Threads**.
+                        Use the **Select Menu** below to navigate commands across categories:
+                        
+                        🛡️ **Security Recon & Audit**: `/dnsscan`, `/headers`, `/ssl`, `/securitytxt`, `/hashid`, `/iplookup`, `/passwordstrength`, `/audit`
+                        🔨 **Moderation Engine**: `/warn`, `/warnings`, `/mute`, `/unmute`, `/kick`, `/ban`, `/modlogs`, `/purge`, `/slowmode`, `/lockdown`
+                        🚨 **Anti-Raid & Onboarding**: `/raidmode`, `/verify`, `/automod`, `/report`, `/config`
+                        🤖 **AI Assistant**: `/ask`, `/chat`, `/summarize`, `/translate`, `/explain`, `/code`
+                        🎮 **Cyber RPG & Economy**: `/hack`, `/profile`, `/leaderboard`, `/daily`
+                        🎉 **Fun & Utilities**: `/coinflip`, `/roll`, `/8ball`, `/joke`, `/meme`
+                        📚 **Community Wiki**: `/wikiadd`
+                        🎵 **VC Music**: `/play`, `/skip`, `/stop`, `/queue`, `/nowplaying`, `/pause`, `/resume`
+                        ℹ️ **System & Info**: `/status`, `/ashcrest`, `/source`
+                        """)
                 .setColor(new Color(0x00A8FC))
-                .addField("🤖 AI Assistant (Google Gemini)",
-                        "`/ask <prompt>` (or `!ask <prompt>`) - Ask Aegis AI questions powered by Google Gemini 2.5 Flash\n", false)
-                .addField("🎮 Cyber Operations RPG & Economy",
-                        "`/hack` - Initiate interactive penetration test mini-game against target mainframes for credits & XP\n" +
-                        "`/profile` - View your hacker rank, level, XP progress bar, credits balance, and win stats\n" +
-                        "`/leaderboard` - View top 10 global/server hacker leaderboard\n" +
-                        "`/daily` - Claim your daily 250 🪙 Ashcrest credits\n", false)
-                .addField("🛡️ Security & Engineering",
-                        "`/audit` - Audit server roles, elevated privileges, and security risks\n", false)
-                .addField("📚 Community Wiki",
-                        "`/wiki get <keyword>` - Query the security knowledgebase\n" +
-                        "`/wiki add <keyword> <content>` - Add/update a wiki entry (*Staff/Admin restricted*)", false)
-                .addField("🎵 VC Music & Apple Music",
-                        "`/play <input>` - Play audio in VC (supports Apple Music, YouTube, Direct URLs)\n" +
-                        "`/skip` - Skip current track\n" +
-                        "`/stop` (or `!leave`) - Stop music, clear queue, & disconnect from VC\n" +
-                        "`/queue` - View queued tracks and now playing song\n" +
-                        "`/nowplaying` - Show progress bar & current track info\n" +
-                        "`/pause` / `/resume` - Pause or resume music playback", false)
-                .addField("⚙️ System & Community Info",
-                        "`/status` - Check bot gateway latency, uptime, and Java 26 status\n" +
-                        "`/ashcrest` - View official AshcrestHQ community links and public bot invite\n" +
-                        "`/source` (or `/aegis`) - View open-source GitHub repository & MIT license info\n" +
-                        "`/help` - Display this command directory\n" +
-                        "📖 **Deployment Guide**: [SETUP.md](https://github.com/AshcrestHQ/Aegis/blob/main/SETUP.md)", false)
-                .setFooter("Ashcrest Aegis | Universal Discord Bot Engine", null)
+                .setFooter("AshcrestHQ Aegis Operations | Java 26 Virtual Threads", null)
                 .setTimestamp(Instant.now());
+    }
+
+    public static StringSelectMenu buildCategorySelectMenu() {
+        return StringSelectMenu.create("help_category_select")
+                .setPlaceholder("📂 Choose a Command Category...")
+                .addOption("🛡️ Security Recon & Audit", "help_sec", "DNS, headers, SSL, IP lookup, entropy, security audit")
+                .addOption("🔨 Moderation Engine", "help_mod", "Warn, mute, kick, ban, purge, slowmode, lockdown")
+                .addOption("🚨 Anti-Raid & Onboarding", "help_raid", "Raidmode, verify gate, automod, report, config")
+                .addOption("🤖 AI Assistant", "help_ai", "Gemini 3.6 Flash ask, chat, summarize, translate, explain, code")
+                .addOption("🎮 Cyber RPG & Economy", "help_rpg", "Hack penetration game, profile, leaderboard, daily")
+                .addOption("🎉 Fun & Utilities", "help_fun", "Coinflip, roll dice, 8ball, joke, meme")
+                .addOption("🎵 VC Music Audio", "help_music", "DAVE E2EE VC audio, Apple Music, YouTube multi-client")
+                .addOption("ℹ️ System & Info", "help_sys", "Bot health, status, Ashcrest links, open-source repo")
+                .build();
     }
 
     @Override
     public String getName() { return "help"; }
 
     @Override
-    public String getDescription() { return "Display Aegis commands categorized by security, wiki, and system info"; }
+    public String getDescription() { return "Display Aegis master command directory categorized by module"; }
 
     @Override
     public String getUsage() { return "!help or /help"; }

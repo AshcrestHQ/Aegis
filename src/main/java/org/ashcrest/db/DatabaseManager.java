@@ -90,10 +90,47 @@ public class DatabaseManager {
                 stmt.execute(createEconomyTable);
             }
 
+            String createGuildSettingsTable = """
+                CREATE TABLE IF NOT EXISTS guild_settings (
+                    guild_id BIGINT PRIMARY KEY,
+                    mod_log_channel_id BIGINT DEFAULT 0,
+                    welcome_channel_id BIGINT DEFAULT 0,
+                    welcome_message TEXT DEFAULT 'Welcome {user} to {server}!',
+                    autorole_id BIGINT DEFAULT 0,
+                    automod_enabled BOOLEAN DEFAULT FALSE,
+                    automod_spam_threshold INT DEFAULT 5,
+                    automod_banned_words TEXT DEFAULT '',
+                    prefix_override VARCHAR(10) DEFAULT NULL
+                );
+                """;
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute(createGuildSettingsTable);
+            }
+
+            String createModCasesTable = """
+                CREATE TABLE IF NOT EXISTS mod_cases (
+                    id SERIAL PRIMARY KEY,
+                    guild_id BIGINT NOT NULL,
+                    user_id BIGINT NOT NULL,
+                    moderator_id BIGINT NOT NULL,
+                    action VARCHAR(50) NOT NULL,
+                    reason TEXT NOT NULL,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    active BOOLEAN DEFAULT TRUE
+                );
+                """;
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute(createModCasesTable);
+            }
+
             System.out.println("✅ Aegis Database Schema Initialized");
         } catch (SQLException e) {
             System.err.println("⚠️ Database schema init warning (DB may be offline): " + e.getMessage());
         }
+    }
+
+    public HikariDataSource getDataSource() {
+        return dataSource;
     }
 
     public CompletableFuture<Boolean> addWikiEntry(String keyword, String content, String contributor) {

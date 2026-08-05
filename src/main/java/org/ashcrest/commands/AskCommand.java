@@ -19,7 +19,6 @@ import java.util.concurrent.Executors;
 public class AskCommand implements ICommand {
     private static final OkHttpClient httpClient = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
@@ -62,7 +61,7 @@ public class AskCommand implements ICommand {
             String jsonPayload = objectMapper.writeValueAsString(new GeminiRequest(prompt));
             RequestBody body = RequestBody.create(jsonPayload, MediaType.parse("application/json; charset=utf-8"));
 
-            String url = GEMINI_ENDPOINT + "?key=" + apiKey;
+            String url = Config.GEMINI_API_URL + "?key=" + apiKey;
             Request request = new Request.Builder()
                     .url(url)
                     .post(body)
