@@ -15,7 +15,11 @@ import java.util.concurrent.Executors;
 
 
 public class AskCommand implements ICommand {
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

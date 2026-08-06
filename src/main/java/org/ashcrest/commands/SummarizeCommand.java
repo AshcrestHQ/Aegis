@@ -19,7 +19,11 @@ import java.util.concurrent.Executors;
  * Text & Article Summarization Command powered by Gemini 3.6 Flash.
  */
 public class SummarizeCommand implements ICommand {
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -48,13 +52,11 @@ public class SummarizeCommand implements ICommand {
         String text = opt.getAsString();
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String summary = summarize(text);
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("📝 Text Summarization")
-                    .setColor(new Color(0x00FFC8))
-                    .setDescription(summary.length() > 3900 ? summary.substring(0, 3897) + "..." : summary)
-                    .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
-                    .setTimestamp(Instant.now());
-            event.getHook().sendMessageEmbeds(embed.build()).queue();
+            String content = "📝 **Text Summarization**\n\n" + summary;
+            if (content.length() > 2000) {
+                content = content.substring(0, 1995) + "...";
+            }
+            event.getHook().sendMessage(content).queue();
         });
     }
 
@@ -79,13 +81,11 @@ public class SummarizeCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String summary) {
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("📝 Text Summarization")
-                .setColor(new Color(0x00FFC8))
-                .setDescription(summary.length() > 3900 ? summary.substring(0, 3897) + "..." : summary)
-                .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
-                .setTimestamp(Instant.now());
-        channel.sendMessageEmbeds(embed.build()).queue();
+        String content = "📝 **Text Summarization**\n\n" + summary;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        channel.sendMessage(content).queue();
     }
 
     @Override

@@ -19,7 +19,11 @@ import java.util.concurrent.Executors;
  * Text & Code Explanation Command powered by Gemini 3.6 Flash.
  */
 public class ExplainCommand implements ICommand {
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -48,14 +52,11 @@ public class ExplainCommand implements ICommand {
         String query = opt.getAsString();
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String explanation = explain(query);
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("💡 AI Concept & Code Explanation")
-                    .setColor(new Color(0xFFD700))
-                    .addField("❓ Query", query.length() > 250 ? query.substring(0, 247) + "..." : query, false)
-                    .setDescription(explanation.length() > 3800 ? explanation.substring(0, 3797) + "..." : explanation)
-                    .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
-                    .setTimestamp(Instant.now());
-            event.getHook().sendMessageEmbeds(embed.build()).queue();
+            String content = "💡 **AI Concept & Code Explanation**\n\n**❓ Query:** `" + query + "`\n\n" + explanation;
+            if (content.length() > 2000) {
+                content = content.substring(0, 1995) + "...";
+            }
+            event.getHook().sendMessage(content).queue();
         });
     }
 
@@ -80,14 +81,11 @@ public class ExplainCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String query, String explanation) {
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("💡 AI Concept & Code Explanation")
-                .setColor(new Color(0xFFD700))
-                .addField("❓ Query", query.length() > 250 ? query.substring(0, 247) + "..." : query, false)
-                .setDescription(explanation.length() > 3800 ? explanation.substring(0, 3797) + "..." : explanation)
-                .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
-                .setTimestamp(Instant.now());
-        channel.sendMessageEmbeds(embed.build()).queue();
+        String content = "💡 **AI Concept & Code Explanation**\n\n**❓ Query:** `" + query + "`\n\n" + explanation;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        channel.sendMessage(content).queue();
     }
 
     @Override

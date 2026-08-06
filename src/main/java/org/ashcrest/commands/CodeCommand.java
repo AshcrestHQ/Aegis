@@ -19,7 +19,11 @@ import java.util.concurrent.Executors;
  * Software Engineering & Coding Q&A Assistant Command.
  */
 public class CodeCommand implements ICommand {
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -48,14 +52,11 @@ public class CodeCommand implements ICommand {
         String question = opt.getAsString();
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String answer = answerCodeQuestion(question);
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("💻 Coding & Engineering Q&A")
-                    .setColor(new Color(0x9B59B6))
-                    .addField("❓ Question", question.length() > 250 ? question.substring(0, 247) + "..." : question, false)
-                    .setDescription(answer.length() > 3800 ? answer.substring(0, 3797) + "..." : answer)
-                    .setFooter("Powered by Google Gemini 3.6 Flash | Software Engineering Q&A", Config.GEMINI_LOGO_URL)
-                    .setTimestamp(Instant.now());
-            event.getHook().sendMessageEmbeds(embed.build()).queue();
+            String content = "💻 **Coding & Engineering Q&A**\n\n**❓ Question:** `" + question + "`\n\n" + answer;
+            if (content.length() > 2000) {
+                content = content.substring(0, 1995) + "...";
+            }
+            event.getHook().sendMessage(content).queue();
         });
     }
 
@@ -80,14 +81,11 @@ public class CodeCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String q, String answer) {
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("💻 Coding & Engineering Q&A")
-                .setColor(new Color(0x9B59B6))
-                .addField("❓ Question", q.length() > 250 ? q.substring(0, 247) + "..." : q, false)
-                .setDescription(answer.length() > 3800 ? answer.substring(0, 3797) + "..." : answer)
-                .setFooter("Powered by Google Gemini 3.6 Flash | Software Engineering Q&A", Config.GEMINI_LOGO_URL)
-                .setTimestamp(Instant.now());
-        channel.sendMessageEmbeds(embed.build()).queue();
+        String content = "💻 **Coding & Engineering Q&A**\n\n**❓ Question:** `" + q + "`\n\n" + answer;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        channel.sendMessage(content).queue();
     }
 
     @Override

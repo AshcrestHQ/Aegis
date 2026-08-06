@@ -40,7 +40,7 @@ public class HelpCommand implements ICommand {
                         🚨 **Anti-Raid & Onboarding**: `/raidmode`, `/verify`, `/automod`, `/report`, `/config`
                         🤖 **AI Assistant**: `/ask`, `/chat`, `/summarize`, `/translate`, `/explain`, `/code`
                         🎮 **Cyber RPG & Economy**: `/hack`, `/profile`, `/leaderboard`, `/daily`
-                        🎉 **Fun & Utilities**: `/coinflip`, `/roll`, `/8ball`, `/joke`, `/meme`
+                        🎉 **Fun & Utilities**: `/coinflip`, `/roll`, `/8ball`, `/joke`, `/meme`, `/quote`
                         📚 **Community Wiki**: `/wikiadd`
                         🎵 **VC Music**: `/play`, `/skip`, `/stop`, `/queue`, `/nowplaying`, `/pause`, `/resume`
                         ℹ️ **System & Info**: `/status`, `/ashcrest`, `/source`

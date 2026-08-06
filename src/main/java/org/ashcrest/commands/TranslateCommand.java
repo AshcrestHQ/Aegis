@@ -19,7 +19,11 @@ import java.util.concurrent.Executors;
  * Multilingual Translation Command powered by Gemini 3.6 Flash.
  */
 public class TranslateCommand implements ICommand {
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -53,13 +57,11 @@ public class TranslateCommand implements ICommand {
 
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String translated = translate(targetLang, text);
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("🌐 Translation — " + targetLang)
-                    .setColor(new Color(0x00A8FC))
-                    .setDescription(translated)
-                    .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
-                    .setTimestamp(Instant.now());
-            event.getHook().sendMessageEmbeds(embed.build()).queue();
+            String content = "🌐 **Translation — " + targetLang + "**\n\n" + translated;
+            if (content.length() > 2000) {
+                content = content.substring(0, 1995) + "...";
+            }
+            event.getHook().sendMessage(content).queue();
         });
     }
 
@@ -84,13 +86,11 @@ public class TranslateCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String lang, String text) {
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("🌐 Translation — " + lang)
-                .setColor(new Color(0x00A8FC))
-                .setDescription(text)
-                .setFooter("Powered by Google Gemini 3.6 Flash", Config.GEMINI_LOGO_URL)
-                .setTimestamp(Instant.now());
-        channel.sendMessageEmbeds(embed.build()).queue();
+        String content = "🌐 **Translation — " + lang + "**\n\n" + text;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        channel.sendMessage(content).queue();
     }
 
     @Override

@@ -101,6 +101,22 @@ public class CommandListener extends ListenerAdapter {
     }
 
     @Override
+    public void onMessageContextInteraction(net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent event) {
+        if ("Quote Message".equals(event.getName())) {
+            ICommand command = bot.getCommand("quote");
+            if (command instanceof org.ashcrest.commands.QuoteCommand quoteCmd) {
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        quoteCmd.executeContext(event);
+                    } catch (Exception e) {
+                        System.err.println("Error executing context command: " + e.getMessage());
+                    }
+                }, bot.getVirtualThreadExecutor());
+            }
+        }
+    }
+
+    @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         long guildId = event.getGuild().getIdLong();
         GuildSettingsManager.getInstance().getSettings(guildId).thenAccept(settings -> {
@@ -383,7 +399,8 @@ public class CommandListener extends ListenerAdapter {
                         .addField("`/roll <sides>`", "Roll a die with optional custom side count", false)
                         .addField("`/8ball <question>`", "Ask the Magic 8-Ball a question", false)
                         .addField("`/joke`", "Get a programming joke", false)
-                        .addField("`/meme`", "Get a cyber meme", false);
+                        .addField("`/meme`", "Get a cyber meme", false)
+                        .addField("`/quote <message_id>`", "Quote a message as an image (also via Right Click -> Apps -> Quote Message)", false);
 
                 case "help_music" -> embed.setTitle("🎵 VC Music Audio Commands")
                         .setColor(new Color(0x1DB954))

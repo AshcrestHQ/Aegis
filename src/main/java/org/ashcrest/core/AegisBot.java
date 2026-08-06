@@ -120,6 +120,7 @@ public class AegisBot {
         commands.put("8ball", fun);
         commands.put("joke", fun);
         commands.put("meme", fun);
+        registerCommand(new QuoteCommand());
 
 
         registerCommand(new PlayCommand());
@@ -279,6 +280,9 @@ public class AegisBot {
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "question", "Question", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("joke", "Get a programming joke"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("meme", "Get a cyber meme"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("quote", "Quote a message as an image")
+                        .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "message_id", "Message ID to quote", true),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.message("Quote Message"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("play", "Play audio in your VC (supports Apple Music, YouTube, direct audio URLs)")
                         .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "input", "Song title, URL, or Apple Music link", true),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("skip", "Skip the currently playing track"),
