@@ -1,0 +1,19 @@
+// Aegis Bot Configuration
+
+struct Config {
+    discord_token: str,
+    db_host: str,
+    db_user: str,
+    db_pass: str,
+}
+
+fn load_config() -> Config {
+    // In a real implementation, we would read from .env file using Wyzer's IO/C bindings.
+    // For now, we mock the configuration loading.
+    return Config {
+        discord_token: "mock_token_123",
+        db_host: "localhost:5432",
+        db_user: "postgres",
+        db_pass: "password"
+    };
+}

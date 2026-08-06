@@ -1,0 +1,16 @@
+// Aegis Cyber Breach RPG (Wyzer)
+import bundle::lib::wyzer_discord::api;
+import bundle::src::db::economy;
+
+fn handle_hack(ctx: handler::CommandContext, target_node: str) {
+    // Basic probability mock
+    let success = true; 
+    
+    if success {
+        let reward = 50u32;
+        economy::add_balance(ctx.message.author.id, reward);
+        api::send_message(ctx.channel_id, f"Hack successful! You breached {target_node} and extracted {reward} 🪙.");
+    } else {
+        api::send_message(ctx.channel_id, f"Hack failed! The firewall at {target_node} blocked your connection.");
+    }
+}

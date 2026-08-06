@@ -1,0 +1,22 @@
+// Aegis Event Router (Wyzer)
+import bundle::lib::wyzer_discord::api;
+import handler;
+
+fn dispatch_event(event: api::GatewayEvent) {
+    match (event) {
+        MessageCreate(msg) => {
+            // Route to the command handler
+            handler::handle_command(msg);
+        },
+        InteractionCreate(interaction) => {
+            std::io::println("Dispatching interaction...");
+            // Route to interaction handler
+        },
+        Ready => {
+            std::io::println("System ready.");
+        },
+        None => {
+            // Do nothing
+        }
+    };
+}

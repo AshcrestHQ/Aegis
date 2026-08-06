@@ -1,0 +1,12 @@
+// Aegis Security Recon Engine (Wyzer)
+import bundle::lib::wyzer_discord::api;
+
+fn scan_dns(target: str) -> str {
+    // Mocking DNSSEC and SPF check
+    return f"DNS Scan Results for {target}:\n- SPF: v=spf1 include:_spf.google.com ~all\n- DNSSEC: Signed";
+}
+
+fn handle_dnsscan(ctx: handler::CommandContext, target: str) {
+    let result = scan_dns(target);
+    api::send_message(ctx.channel_id, result);
+}
