@@ -15,9 +15,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 
-/**
- * Stateful Multi-Turn AI Chat Command powered by Google Gemini 3.6 Flash.
- */
+
 public class ChatCommand implements ICommand {
     private static final OkHttpClient httpClient = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -108,27 +106,19 @@ public class ChatCommand implements ICommand {
     }
 
     private void sendEmbedReply(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String prompt, String answer) {
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("🤖 Aegis Stateful AI Chat")
-                .setColor(new Color(0x7289DA))
-                .addField("💬 Prompt", prompt.length() > 250 ? prompt.substring(0, 247) + "..." : prompt, false)
-                .setDescription(answer.length() > 3900 ? answer.substring(0, 3897) + "..." : answer)
-                .setFooter("Powered by Google Gemini 3.6 Flash | Channel Context Enabled", Config.GEMINI_LOGO_URL)
-                .setTimestamp(Instant.now());
-
-        channel.sendMessageEmbeds(embed.build()).queue();
+        String content = "🤖 **Aegis Stateful AI Chat**\n\n**💬 Prompt:** `" + prompt + "`\n\n" + answer;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        channel.sendMessage(content).queue();
     }
 
     private void sendSlashEmbedReply(SlashCommandInteractionEvent event, String prompt, String answer) {
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("🤖 Aegis Stateful AI Chat")
-                .setColor(new Color(0x7289DA))
-                .addField("💬 Prompt", prompt.length() > 250 ? prompt.substring(0, 247) + "..." : prompt, false)
-                .setDescription(answer.length() > 3900 ? answer.substring(0, 3897) + "..." : answer)
-                .setFooter("Powered by Google Gemini 3.6 Flash | Channel Context Enabled", Config.GEMINI_LOGO_URL)
-                .setTimestamp(Instant.now());
-
-        event.getHook().sendMessageEmbeds(embed.build()).queue();
+        String content = "🤖 **Aegis Stateful AI Chat**\n\n**💬 Prompt:** `" + prompt + "`\n\n" + answer;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        event.getHook().sendMessage(content).queue();
     }
 
     @Override

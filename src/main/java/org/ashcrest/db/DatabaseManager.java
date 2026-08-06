@@ -11,9 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Database manager for Aegis community wiki & role verification logs.
- */
+
 public class DatabaseManager {
     private static volatile DatabaseManager instance;
     private final HikariDataSource dataSource;

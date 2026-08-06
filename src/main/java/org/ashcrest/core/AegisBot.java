@@ -16,9 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Main Aegis Bot core manager.
- */
+
 public class AegisBot {
     private static volatile JDA jdaInstance;
     private static volatile AegisBot botInstance;
@@ -69,13 +67,13 @@ public class AegisBot {
         registerCommand(new SourceCommand());
         registerCommand(new AskCommand());
 
-        // Cyber Hack RPG Game Commands
+
         registerCommand(new HackCommand());
         registerCommand(new ProfileCommand());
         registerCommand(new LeaderboardCommand());
         registerCommand(new DailyCommand());
 
-        // Config & Moderation
+
         registerCommand(new ConfigCommand());
         registerCommand(new org.ashcrest.commands.moderation.WarnCommand());
         registerCommand(new org.ashcrest.commands.moderation.WarningsCommand());
@@ -88,13 +86,13 @@ public class AegisBot {
         registerCommand(new org.ashcrest.commands.moderation.SlowmodeCommand());
         registerCommand(new org.ashcrest.commands.moderation.LockdownCommand());
 
-        // Anti-Raid & Onboarding
+
         registerCommand(new org.ashcrest.commands.antiraid.RaidModeCommand());
         registerCommand(new org.ashcrest.commands.antiraid.VerifyCommand());
         registerCommand(new org.ashcrest.commands.antiraid.AutoModCommand());
         registerCommand(new org.ashcrest.commands.antiraid.ReportCommand());
 
-        // Security Recon
+
         registerCommand(new DnsScanCommand());
         registerCommand(new HeadersCommand());
         registerCommand(new SslCommand());
@@ -108,14 +106,14 @@ public class AegisBot {
         registerCommand(new CveCommand());
         registerCommand(new SubdomainsCommand());
 
-        // AI Suite
+
         registerCommand(new ChatCommand());
         registerCommand(new SummarizeCommand());
         registerCommand(new TranslateCommand());
         registerCommand(new ExplainCommand());
         registerCommand(new CodeCommand());
 
-        // Fun Commands
+
         FunCommands fun = new FunCommands();
         registerCommand(fun);
         commands.put("roll", fun);
@@ -123,7 +121,7 @@ public class AegisBot {
         commands.put("joke", fun);
         commands.put("meme", fun);
 
-        // VC Music & Apple Music Commands
+
         registerCommand(new PlayCommand());
         registerCommand(new SkipCommand());
         StopCommand stopCmd = new StopCommand();

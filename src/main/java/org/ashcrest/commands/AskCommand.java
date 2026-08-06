@@ -13,9 +13,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 
-/**
- * AI Assistant Command powered by Google Gemini API.
- */
+
 public class AskCommand implements ICommand {
     private static final OkHttpClient httpClient = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -104,32 +102,19 @@ public class AskCommand implements ICommand {
     }
 
     private void sendSlashEmbedReply(SlashCommandInteractionEvent event, String prompt, String answer) {
-        EmbedBuilder embed = createGeminiEmbed(prompt, answer);
-        event.getHook().sendMessageEmbeds(embed.build()).queue();
+        String content = "✨ **Aegis AI Assistant**\n\n**❓ Prompt:** `" + prompt + "`\n\n" + answer;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
+        }
+        event.getHook().sendMessage(content).queue();
     }
 
     private void sendEmbedReply(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String prompt, String answer) {
-        EmbedBuilder embed = createGeminiEmbed(prompt, answer);
-        channel.sendMessageEmbeds(embed.build()).queue();
-    }
-
-    private EmbedBuilder createGeminiEmbed(String prompt, String answer) {
-        String truncatedAnswer = answer;
-        if (truncatedAnswer.length() > 3900) {
-            truncatedAnswer = truncatedAnswer.substring(0, 3890) + "\n\n*(Response truncated due to size limits)*";
+        String content = "✨ **Aegis AI Assistant**\n\n**❓ Prompt:** `" + prompt + "`\n\n" + answer;
+        if (content.length() > 2000) {
+            content = content.substring(0, 1995) + "...";
         }
-
-        String truncatedPrompt = prompt;
-        if (truncatedPrompt.length() > 250) {
-            truncatedPrompt = truncatedPrompt.substring(0, 247) + "...";
-        }
-
-        return new EmbedBuilder()
-                .setTitle("✨ Aegis AI Assistant")
-                .addField("❓ Prompt", "`" + truncatedPrompt + "`", false)
-                .setDescription(truncatedAnswer)
-                .setColor(new Color(66, 133, 244)) // Google Blue
-                .setFooter("Powered by Google Gemini 3.6 Flash • AshcrestHQ Aegis", Config.GEMINI_LOGO_URL);
+        channel.sendMessage(content).queue();
     }
 
     @Override
@@ -141,7 +126,7 @@ public class AskCommand implements ICommand {
     @Override
     public String getUsage() { return "!ask <question | prompt>"; }
 
-    // Helper Record for Gemini JSON request formatting
+
     private record GeminiRequest(java.util.List<Content> contents) {
         public GeminiRequest(String text) {
             this(java.util.List.of(new Content(java.util.List.of(new Part(text)))));

@@ -20,9 +20,6 @@ import java.awt.Color;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Event listener handling commands, automod, onboarding events, and audit logs on Java 26 Virtual Threads.
- */
 public class CommandListener extends ListenerAdapter {
     private final AegisBot bot;
 
@@ -39,6 +36,27 @@ public class CommandListener extends ListenerAdapter {
 
         String content = event.getMessage().getContentRaw();
         String prefix = event.isFromGuild() ? GuildSettingsManager.getInstance().getPrefix(event.getGuild().getIdLong()) : Config.BOT_PREFIX;
+
+        String selfMention = "<@" + event.getJDA().getSelfUser().getId() + ">";
+        String selfMentionAlt = "<@!" + event.getJDA().getSelfUser().getId() + ">";
+        
+        if (content.startsWith(selfMention) || content.startsWith(selfMentionAlt)) {
+            String mention = content.startsWith(selfMention) ? selfMention : selfMentionAlt;
+            String query = content.substring(mention.length()).trim();
+            if (!query.isEmpty()) {
+                ICommand askCommand = bot.getCommand("ask");
+                if (askCommand != null) {
+                    CompletableFuture.runAsync(() -> {
+                        try {
+                            askCommand.execute(event, query.split("\\s+"));
+                        } catch (Exception e) {
+                            System.err.println("Error executing ask command via mention: " + e.getMessage());
+                        }
+                    }, bot.getVirtualThreadExecutor());
+                }
+            }
+            return;
+        }
 
         if (!content.startsWith(prefix)) return;
 
@@ -86,7 +104,7 @@ public class CommandListener extends ListenerAdapter {
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         long guildId = event.getGuild().getIdLong();
         GuildSettingsManager.getInstance().getSettings(guildId).thenAccept(settings -> {
-            // 1. Verification Gate & Autorole
+
             if (settings.unverifiedRoleId() > 0) {
                 Role unverifiedRole = event.getGuild().getRoleById(settings.unverifiedRoleId());
                 if (unverifiedRole != null) {
@@ -99,7 +117,7 @@ public class CommandListener extends ListenerAdapter {
                 }
             }
 
-            // 2. Welcome Message
+
             if (settings.welcomeChannelId() > 0) {
                 TextChannel welcomeChan = event.getGuild().getTextChannelById(settings.welcomeChannelId());
                 if (welcomeChan != null && welcomeChan.canTalk()) {
@@ -119,7 +137,7 @@ public class CommandListener extends ListenerAdapter {
                 }
             }
 
-            // 3. Audit Log
+
             postAuditLog(event.getGuild(), settings.modLogChannelId(), new EmbedBuilder()
                     .setTitle("📥 Member Joined")
                     .setColor(Color.GREEN)
