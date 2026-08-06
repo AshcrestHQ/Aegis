@@ -106,19 +106,13 @@ public class AskCommand implements ICommand {
     }
 
     private void sendSlashEmbedReply(SlashCommandInteractionEvent event, String prompt, String answer) {
-        String content = "✨ **Aegis AI Assistant**\n\n**❓ Prompt:** `" + prompt + "`\n\n" + answer;
-        if (content.length() > 2000) {
-            content = content.substring(0, 1995) + "...";
-        }
-        event.getHook().sendMessage(content).queue();
+        String prefix = "✨ **Aegis AI Assistant**\n\n**❓ Prompt:** `" + prompt + "`\n\n";
+        org.ashcrest.core.MessageUtils.sendLongMessageSlash(event, prefix, answer);
     }
 
     private void sendEmbedReply(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String prompt, String answer) {
-        String content = "✨ **Aegis AI Assistant**\n\n**❓ Prompt:** `" + prompt + "`\n\n" + answer;
-        if (content.length() > 2000) {
-            content = content.substring(0, 1995) + "...";
-        }
-        channel.sendMessage(content).queue();
+        String prefix = "✨ **Aegis AI Assistant**\n\n**❓ Prompt:** `" + prompt + "`\n\n";
+        org.ashcrest.core.MessageUtils.sendLongMessage(channel, prefix, answer);
     }
 
     @Override

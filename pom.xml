@@ -37,6 +37,11 @@
 
     <dependencyManagement>
         <dependencies>
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>5.1.1</version>
+        </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
@@ -48,6 +53,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>5.1.1</version>
+        </dependency>
         <!-- Lavaplayer for Voice Channel Music -->
         <dependency>
             <groupId>dev.arbjerg</groupId>

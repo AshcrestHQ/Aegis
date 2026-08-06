@@ -52,11 +52,8 @@ public class ExplainCommand implements ICommand {
         String query = opt.getAsString();
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String explanation = explain(query);
-            String content = "💡 **AI Concept & Code Explanation**\n\n**❓ Query:** `" + query + "`\n\n" + explanation;
-            if (content.length() > 2000) {
-                content = content.substring(0, 1995) + "...";
-            }
-            event.getHook().sendMessage(content).queue();
+            String prefix = "💡 **AI Concept & Code Explanation**\n\n**❓ Query:** `" + query + "`\n\n";
+            org.ashcrest.core.MessageUtils.sendLongMessageSlash(event, prefix, explanation);
         });
     }
 
@@ -81,11 +78,8 @@ public class ExplainCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String query, String explanation) {
-        String content = "💡 **AI Concept & Code Explanation**\n\n**❓ Query:** `" + query + "`\n\n" + explanation;
-        if (content.length() > 2000) {
-            content = content.substring(0, 1995) + "...";
-        }
-        channel.sendMessage(content).queue();
+        String prefix = "💡 **AI Concept & Code Explanation**\n\n**❓ Query:** `" + query + "`\n\n";
+        org.ashcrest.core.MessageUtils.sendLongMessage(channel, prefix, explanation);
     }
 
     @Override

@@ -52,16 +52,13 @@ public class SummarizeCommand implements ICommand {
         String text = opt.getAsString();
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String summary = summarize(text);
-            String content = "📝 **Text Summarization**\n\n" + summary;
-            if (content.length() > 2000) {
-                content = content.substring(0, 1995) + "...";
-            }
-            event.getHook().sendMessage(content).queue();
+            String prefix = "📄 **AI Summary**\n\n";
+            org.ashcrest.core.MessageUtils.sendLongMessageSlash(event, prefix, summary);
         });
     }
 
     private String summarize(String content) {
-        String prompt = "Please summarize the following text into concise, bulleted key takeaways:\n\n" + content;
+        String prompt = "Summarize the following text accurately and concisely:\n\n" + content;
         try {
             Map<String, Object> payloadMap = Map.of("contents", List.of(Map.of("parts", List.of(Map.of("text", prompt)))));
             String jsonPayload = objectMapper.writeValueAsString(payloadMap);
@@ -71,7 +68,7 @@ public class SummarizeCommand implements ICommand {
             Request request = new Request.Builder().url(url).post(body).build();
 
             try (Response response = httpClient.newCall(request).execute()) {
-                if (!response.isSuccessful() || response.body() == null) return "❌ Failed to generate summary.";
+                if (!response.isSuccessful() || response.body() == null) return "❌ Summary error.";
                 JsonNode root = objectMapper.readTree(response.body().string());
                 return root.path("candidates").get(0).path("content").path("parts").get(0).path("text").asText();
             }
@@ -81,11 +78,8 @@ public class SummarizeCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String summary) {
-        String content = "📝 **Text Summarization**\n\n" + summary;
-        if (content.length() > 2000) {
-            content = content.substring(0, 1995) + "...";
-        }
-        channel.sendMessage(content).queue();
+        String prefix = "📄 **AI Summary**\n\n";
+        org.ashcrest.core.MessageUtils.sendLongMessage(channel, prefix, summary);
     }
 
     @Override

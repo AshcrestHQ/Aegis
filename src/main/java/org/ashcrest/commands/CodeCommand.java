@@ -52,11 +52,8 @@ public class CodeCommand implements ICommand {
         String question = opt.getAsString();
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String answer = answerCodeQuestion(question);
-            String content = "💻 **Coding & Engineering Q&A**\n\n**❓ Question:** `" + question + "`\n\n" + answer;
-            if (content.length() > 2000) {
-                content = content.substring(0, 1995) + "...";
-            }
-            event.getHook().sendMessage(content).queue();
+            String prefix = "💻 **Coding & Engineering Q&A**\n\n**❓ Question:** `" + question + "`\n\n";
+            org.ashcrest.core.MessageUtils.sendLongMessageSlash(event, prefix, answer);
         });
     }
 
@@ -81,11 +78,8 @@ public class CodeCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String q, String answer) {
-        String content = "💻 **Coding & Engineering Q&A**\n\n**❓ Question:** `" + q + "`\n\n" + answer;
-        if (content.length() > 2000) {
-            content = content.substring(0, 1995) + "...";
-        }
-        channel.sendMessage(content).queue();
+        String prefix = "💻 **Coding & Engineering Q&A**\n\n**❓ Question:** `" + q + "`\n\n";
+        org.ashcrest.core.MessageUtils.sendLongMessage(channel, prefix, answer);
     }
 
     @Override

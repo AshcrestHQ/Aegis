@@ -57,11 +57,8 @@ public class TranslateCommand implements ICommand {
 
         Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
             String translated = translate(targetLang, text);
-            String content = "🌐 **Translation — " + targetLang + "**\n\n" + translated;
-            if (content.length() > 2000) {
-                content = content.substring(0, 1995) + "...";
-            }
-            event.getHook().sendMessage(content).queue();
+            String prefix = "🌐 **Translation — " + targetLang + "**\n\n";
+            org.ashcrest.core.MessageUtils.sendLongMessageSlash(event, prefix, translated);
         });
     }
 
@@ -86,11 +83,8 @@ public class TranslateCommand implements ICommand {
     }
 
     private void sendEmbed(net.dv8tion.jda.api.entities.channel.concrete.TextChannel channel, String lang, String text) {
-        String content = "🌐 **Translation — " + lang + "**\n\n" + text;
-        if (content.length() > 2000) {
-            content = content.substring(0, 1995) + "...";
-        }
-        channel.sendMessage(content).queue();
+        String prefix = "🌐 **Translation — " + lang + "**\n\n";
+        org.ashcrest.core.MessageUtils.sendLongMessage(channel, prefix, text);
     }
 
     @Override

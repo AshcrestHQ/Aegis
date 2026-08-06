@@ -1,6 +1,8 @@
 package org.ashcrest.commands;
 
+import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,8 +18,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QuoteCommand implements ICommand {
+
+    private static final int EMOJI_SIZE = 32;
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
@@ -39,7 +45,7 @@ public class QuoteCommand implements ICommand {
             event.reply("⚠️ Please provide a message ID.").setEphemeral(true).queue();
             return;
         }
-        
+
         event.deferReply().queue();
         event.getChannel().retrieveMessageById(opt.getAsString()).queue(message -> {
             Executors.newVirtualThreadPerTaskExecutor().submit(() -> {
@@ -80,51 +86,86 @@ public class QuoteCommand implements ICommand {
 
     private byte[] createQuoteImage(Message message) throws Exception {
         int width = 800;
-        int height = 300;
+        int minHeight = 300;
+
+        String rawContent = message.getContentDisplay();
+        if (rawContent.isEmpty() && !message.getAttachments().isEmpty()) {
+            rawContent = "[Attachment]";
+        }
         
+        List<RenderElement> elements = parseElements("“" + rawContent + "”", message);
+
+        BufferedImage tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D tempG = tempImage.createGraphics();
+        tempG.setFont(new Font("SansSerif", Font.ITALIC, 28));
+        FontMetrics fm = tempG.getFontMetrics();
+        
+        int textX = 190;
+        int maxWidth = width - textX - 40;
+        
+        List<List<RenderElement>> lines = wrapElements(elements, fm, maxWidth);
+        
+        int textHeight = lines.size() * (fm.getHeight() + 10);
+        int height = Math.max(minHeight, textHeight + 100);
+        tempG.dispose();
+
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bufferedImage.createGraphics();
 
-        // Anti-aliasing
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         // Background
-        g2d.setColor(new Color(24, 25, 28)); // Discord dark theme color
+        g2d.setColor(new Color(24, 25, 28));
         g2d.fillRect(0, 0, width, height);
 
         // Draw Avatar
         String avatarUrl = message.getAuthor().getEffectiveAvatarUrl() + "?size=256";
-        BufferedImage avatar = ImageIO.read(new URL(avatarUrl));
+        BufferedImage avatar = null;
+        try {
+            avatar = ImageIO.read(new URL(avatarUrl));
+        } catch (Exception ignored) {}
         
         int avatarSize = 120;
         int avatarX = 40;
         int avatarY = (height - avatarSize) / 2;
 
-        g2d.setClip(new Ellipse2D.Float(avatarX, avatarY, avatarSize, avatarSize));
-        g2d.drawImage(avatar, avatarX, avatarY, avatarSize, avatarSize, null);
-        g2d.setClip(null);
+        if (avatar != null) {
+            g2d.setClip(new Ellipse2D.Float(avatarX, avatarY, avatarSize, avatarSize));
+            g2d.drawImage(avatar, avatarX, avatarY, avatarSize, avatarSize, null);
+            g2d.setClip(null);
+        }
 
         // Draw Text
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("SansSerif", Font.ITALIC, 28));
-        
-        String text = "“" + message.getContentDisplay() + "”";
-        int textX = 190;
-        int textY = avatarY + 40;
-        int maxWidth = width - textX - 40;
 
-        List<String> lines = wrapText(text, g2d.getFontMetrics(), maxWidth);
-        for (String line : lines) {
-            g2d.drawString(line, textX, textY);
-            textY += g2d.getFontMetrics().getHeight();
+        int currentY = (height - textHeight) / 2 + fm.getAscent() - 20;
+        
+        for (List<RenderElement> line : lines) {
+            int currentX = textX;
+            for (RenderElement el : line) {
+                if (el.isText) {
+                    g2d.drawString(el.content, currentX, currentY);
+                    currentX += fm.stringWidth(el.content);
+                } else {
+                    try {
+                        BufferedImage emj = ImageIO.read(new URL(el.content));
+                        if (emj != null) {
+                            g2d.drawImage(emj, currentX, currentY - EMOJI_SIZE + fm.getDescent() + 4, EMOJI_SIZE, EMOJI_SIZE, null);
+                        }
+                    } catch (Exception ignored) {}
+                    currentX += EMOJI_SIZE + 4;
+                }
+            }
+            currentY += fm.getHeight() + 10;
         }
 
         // Draw Author Name
         g2d.setColor(new Color(185, 187, 190));
         g2d.setFont(new Font("SansSerif", Font.BOLD, 22));
         String authorName = "— " + message.getAuthor().getEffectiveName();
-        g2d.drawString(authorName, textX, textY + 20);
+        g2d.drawString(authorName, textX, currentY + 10);
 
         g2d.dispose();
 
@@ -133,22 +174,99 @@ public class QuoteCommand implements ICommand {
         return baos.toByteArray();
     }
 
-    private List<String> wrapText(String text, FontMetrics metrics, int maxWidth) {
-        String[] words = text.split(" ");
-        List<String> lines = new ArrayList<>();
-        StringBuilder currentLine = new StringBuilder();
+    private List<RenderElement> parseElements(String text, Message message) {
+        List<RenderElement> elements = new ArrayList<>();
+        
+        // Custom Emojis in Discord format <:name:id> or <a:name:id>
+        Pattern customEmojiPattern = Pattern.compile("<a?:([^:]+):([0-9]+)>");
+        Matcher m = customEmojiPattern.matcher(text);
+        
+        int lastIndex = 0;
+        while (m.find()) {
+            if (m.start() > lastIndex) {
+                String sub = text.substring(lastIndex, m.start());
+                parseUnicodeEmojis(sub, elements);
+            }
+            String id = m.group(2);
+            String ext = m.group().startsWith("<a:") ? "gif" : "png";
+            elements.add(new RenderElement(false, "https://cdn.discordapp.com/emojis/" + id + "." + ext));
+            lastIndex = m.end();
+        }
+        
+        if (lastIndex < text.length()) {
+            parseUnicodeEmojis(text.substring(lastIndex), elements);
+        }
+        
+        return elements;
+    }
+    
+    private void parseUnicodeEmojis(String text, List<RenderElement> elements) {
+        String htmlText = EmojiParser.parseToHtmlHexadecimal(text);
+        Pattern hexPattern = Pattern.compile("&#x([0-9a-fA-F]+);");
+        Matcher m = hexPattern.matcher(htmlText);
+        
+        int lastIndex = 0;
+        while (m.find()) {
+            if (m.start() > lastIndex) {
+                elements.add(new RenderElement(true, htmlText.substring(lastIndex, m.start())));
+            }
+            
+            String hex = m.group(1).toLowerCase();
+            String url = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/" + hex + ".png";
+            elements.add(new RenderElement(false, url));
+            
+            lastIndex = m.end();
+        }
+        
+        if (lastIndex < htmlText.length()) {
+            elements.add(new RenderElement(true, htmlText.substring(lastIndex)));
+        }
+    }
 
-        for (String word : words) {
-            if (metrics.stringWidth(currentLine + word) < maxWidth) {
-                currentLine.append(word).append(" ");
+    private List<List<RenderElement>> wrapElements(List<RenderElement> elements, FontMetrics fm, int maxWidth) {
+        List<List<RenderElement>> lines = new ArrayList<>();
+        List<RenderElement> currentLine = new ArrayList<>();
+        int currentWidth = 0;
+
+        for (RenderElement el : elements) {
+            if (el.isText) {
+                String[] words = el.content.split(" ", -1);
+                for (int i = 0; i < words.length; i++) {
+                    String word = words[i];
+                    int wWidth = fm.stringWidth(word);
+                    
+                    if (currentWidth + wWidth > maxWidth && !currentLine.isEmpty()) {
+                        lines.add(new ArrayList<>(currentLine));
+                        currentLine.clear();
+                        currentWidth = 0;
+                    }
+                    
+                    if (!word.isEmpty()) {
+                        currentLine.add(new RenderElement(true, word));
+                        currentWidth += wWidth;
+                    }
+                    
+                    // Add space width back except for the last element
+                    if (i < words.length - 1) {
+                        currentLine.add(new RenderElement(true, " "));
+                        currentWidth += fm.stringWidth(" ");
+                    }
+                }
             } else {
-                lines.add(currentLine.toString());
-                currentLine = new StringBuilder(word + " ");
+                if (currentWidth + EMOJI_SIZE + 4 > maxWidth && !currentLine.isEmpty()) {
+                    lines.add(new ArrayList<>(currentLine));
+                    currentLine.clear();
+                    currentWidth = 0;
+                }
+                currentLine.add(el);
+                currentWidth += EMOJI_SIZE + 4;
             }
         }
-        if (currentLine.length() > 0) {
-            lines.add(currentLine.toString());
+        
+        if (!currentLine.isEmpty()) {
+            lines.add(currentLine);
         }
+        
         return lines;
     }
 
@@ -160,4 +278,14 @@ public class QuoteCommand implements ICommand {
 
     @Override
     public String getUsage() { return "!quote (while replying) or /quote message_id:<id>"; }
+
+    private static class RenderElement {
+        boolean isText;
+        String content;
+
+        public RenderElement(boolean isText, String content) {
+            this.isText = isText;
+            this.content = content;
+        }
+    }
 }
