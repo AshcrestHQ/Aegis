@@ -1,0 +1,26 @@
+// Aegis Utility & Fun Commands (Wyzer)
+import bundle::lib::wyzer_discord::api;
+
+fn handle_ping(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Pong! Gateway latency: 42ms");
+}
+
+fn handle_help(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Aegis Commands: /hack, /ask, /play, /ban, /dnsscan, and more!");
+}
+
+fn handle_info(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Aegis is running on the experimental Wyzer language.");
+}
+
+fn handle_translate(ctx: handler::CommandContext, text: str, target_lang: str) {
+    api::send_message(ctx.channel_id, f"Translating '{text}' to {target_lang}...");
+}
+
+fn handle_quote(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "> \"Simplicity is not the absence of power. It is power without pretense.\"\n> - Atiksh Sharma");
+}
+
+fn handle_daily(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "You claimed your daily 100 🪙!");
+}

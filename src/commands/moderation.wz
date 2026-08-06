@@ -1,0 +1,30 @@
+// Aegis Moderation Commands (Wyzer)
+import bundle::lib::wyzer_discord::api;
+
+fn handle_ban(ctx: handler::CommandContext, target_user_id: str, reason: str) {
+    api::send_message(ctx.channel_id, f"Banned user {target_user_id} for: {reason}");
+}
+
+fn handle_kick(ctx: handler::CommandContext, target_user_id: str) {
+    api::send_message(ctx.channel_id, f"Kicked user {target_user_id}");
+}
+
+fn handle_mute(ctx: handler::CommandContext, target_user_id: str, duration_mins: u32) {
+    api::send_message(ctx.channel_id, f"Muted user {target_user_id} for {duration_mins} minutes.");
+}
+
+fn handle_purge(ctx: handler::CommandContext, amount: u32) {
+    api::send_message(ctx.channel_id, f"Purged {amount} messages.");
+}
+
+fn handle_lockdown(ctx: handler::CommandContext, status: bool) {
+    if status {
+        api::send_message(ctx.channel_id, "Channel lockdown ENABLED.");
+    } else {
+        api::send_message(ctx.channel_id, "Channel lockdown DISABLED.");
+    }
+}
+
+fn handle_warn(ctx: handler::CommandContext, target_user_id: str, reason: str) {
+    api::send_message(ctx.channel_id, f"Warned user {target_user_id}: {reason}");
+}

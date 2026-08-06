@@ -1,0 +1,28 @@
+// Aegis Music Commands (Wyzer)
+import bundle::lib::wyzer_discord::api;
+import bundle::lib::wyzer_audio::engine;
+
+fn handle_play(ctx: handler::CommandContext, query: str) {
+    api::send_message(ctx.channel_id, f"Searching and playing: {query}...");
+    // Integrates with Wyzer-Audio engine in a real scenario
+}
+
+fn handle_skip(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Skipping current track...");
+}
+
+fn handle_stop(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Stopping playback and clearing queue.");
+}
+
+fn handle_queue(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Current Queue:\n1. Track A\n2. Track B");
+}
+
+fn handle_pause(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Playback paused.");
+}
+
+fn handle_resume(ctx: handler::CommandContext) {
+    api::send_message(ctx.channel_id, "Playback resumed.");
+}
