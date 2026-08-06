@@ -1,0 +1,35 @@
+// Aegis Command Handler (Wyzer)
+import bundle::lib::wyzer_discord::api;
+
+struct CommandContext {
+    message: api::Message,
+    channel_id: str,
+}
+
+struct Command {
+    name: str,
+    description: str,
+    execute: fn(ctx: CommandContext) -> bool,
+}
+
+// Global mutable list for commands (simplified for this rewrite)
+// In a real application, we might use a Hash Map, but standard library is limited.
+var commands: [Command] = [];
+
+fn register_command(cmd: Command) {
+    // Append to the list
+    // commands.push(cmd); // Pseudo-code depending on Wyzer's array operations
+    std::io::println(f"Registered command: {cmd.name}");
+}
+
+fn handle_command(msg: api::Message) {
+    // Very basic parsing: check if starts with prefix !
+    // In Wyzer we might need specific string slicing functions
+    let content = msg.content;
+    
+    // For the sake of the mock rewrite:
+    std::io::println(f"Handling command from content: {content}");
+    
+    // If it was a real command like "!ping"
+    api::send_message(msg.channel_id, "Pong!");
+}
