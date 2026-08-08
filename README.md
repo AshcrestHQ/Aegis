@@ -20,19 +20,19 @@
 ```
 wyzer_bot/
 ├── src/
-│   ├── config.wz         # Configuration and .env parser
-│   ├── main.wz           # Main Choreographic Event Loop
+│   ├── config.wyz        # Configuration and .env parser
+│   ├── main.wyz          # Main Choreographic Event Loop
 │   ├── core/
-│   │   └── events.wz     # Gateway event router
+│   │   └── events.wyz    # Gateway event router
 │   ├── commands/
-│   │   ├── handler.wz    # Modular command registry
-│   │   ├── rpg.wz        # Cyber Breach RPG logic
-│   │   └── ai.wz         # AI Integration logic
+│   │   ├── handler.wyz   # Modular command registry
+│   │   ├── rpg.wyz       # Cyber Breach RPG logic
+│   │   └── ai.wyz        # AI Integration logic
 │   ├── db/
-│   │   ├── postgres.wz   # Wyzer-Postgres connection manager
-│   │   └── economy.wz    # RPG Economy state
+│   │   ├── postgres.wyz  # Wyzer-Postgres connection manager
+│   │   └── economy.wyz   # RPG Economy state
 │   └── security/
-│       └── recon.wz      # Recon and DNS utilities
+│       └── recon.wyz     # Recon and DNS utilities
 ```
 
 ---
@@ -53,5 +53,5 @@ Ensure you have the `wyzerc` compiler installed.
 
 ```bash
 # Compile and run the BotLogic role
-wyzerc -- src/main.wz --role BotLogic
+wyzerc -- src/main.wyz --role BotLogic
 ```
