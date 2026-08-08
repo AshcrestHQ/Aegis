@@ -16,7 +16,7 @@ fn run_bot(token: str) @ BotLogic {
         std::io::println("Connected to Discord Gateway successfully.");
         
         // Main event loop
-        let mut running: bool = true;
+        var running: bool = true;
         while running {
             // Receive an event from the gateway
             let event: api::GatewayEvent = api::receive_event();
