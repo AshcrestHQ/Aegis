@@ -189,10 +189,14 @@
                     <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                         <mainClass>org.ashcrest.Main</mainClass>
                     </transformer>
-                    <!-- Add this transformer to properly merge META-INF/services files -->
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                 </transformers>
                 <filters>
+                    <filter>
+                        <artifact>dnsjava:dnsjava</artifact>
+                        <excludes>
+                            <exclude>META-INF/services/java.net.spi.InetAddressResolverProvider</exclude>
+                        </excludes>
+                    </filter>
                     <filter>
                         <artifact>*:*</artifact>
                         <excludes>
@@ -206,6 +210,7 @@
         </execution>
     </executions>
 </plugin>
+                 
         </plugins>
     </build>
 </project>
