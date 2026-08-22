@@ -79,13 +79,15 @@ GRANT ALL PRIVILEGES ON DATABASE ashcrest_aegis TO aegis_user;
    DB_USER=aegis_user
    DB_PASSWORD=your_secure_password
 
-   # Optional Remote AI Integration (Google Gemini)
+   # AI Service (Google Gemini)
    GEMINI_API_KEY=your_gemini_api_key_here
 
    # Bot Customization
    BOT_PREFIX=!
    BOT_STATUS=🛡️ Aegis | Ashcrest Operations
    ```
+
+> **Note:** All security recon features rely solely on local/free resources. The Gemini API key is the only external service required (and only needed for AI assistant commands like `/ask`, `/chat`, `/summarize`, `/translate`, `/explain`, `/code`). No paid API keys are required.
 
 ---
 
@@ -94,7 +96,7 @@ GRANT ALL PRIVILEGES ON DATABASE ashcrest_aegis TO aegis_user;
 ### Option A: Build and Run JAR
 ```bash
 mvn clean package
-java --enable-preview -jar target/aegis-3.0.0.jar
+java --enable-preview -jar target/aegis-4.0.0.jar
 ```
 
 ### Option B: Run via Maven Directly
@@ -109,12 +111,18 @@ mvn exec:java -Dexec.mainClass="org.ashcrest.Main"
 Once Aegis reports `🛡️ Aegis Bot is online and guarding AshcrestHQ!`, test the following commands in your Discord server:
 
 1. **`!status` / `/status`**: Verifies latency, system uptime, and confirms Java 26 Virtual Threads are operational.
-2. **`!hack` / `/hack`**: Initiates interactive cyber breach penetration testing mini-game with interactive Discord Buttons.
-3. **`!profile` / `/profile`**: Displays your hacker level, rank, XP progress bar, win rate, and credits balance.
-4. **`!leaderboard` / `/leaderboard`**: Displays top hackers ranked by level and vault credits.
-5. **`!daily` / `/daily`**: Claims daily 250 🪙 Ashcrest credits.
-6. **`!audit` / `/audit`**: Performs a security audit on server roles and alerts on permission risks (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`).
-7. **`!play` / `/play`**: Join a Voice Channel and play music via direct search, YouTube link, or Apple Music URL (`https://music.apple.com/...`).
+2. **`!dashboard` / `/dashboard`**: Displays server activity analytics for the last 24 hours.
+3. **`!hack` / `/hack`**: Initiates interactive cyber breach penetration testing mini-game with interactive Discord Buttons.
+4. **`!profile` / `/profile`**: Displays your hacker level, rank, XP progress bar, win rate, and credits balance.
+5. **`!leaderboard` / `/leaderboard`**: Displays top hackers ranked by level and vault credits.
+6. **`!daily` / `/daily`**: Claims daily 250 🪙 Ashcrest credits.
+7. **`!audit` / `/audit`**: Performs a security audit on server roles and alerts on permission risks (`ADMINISTRATOR`, `MANAGE_ROLES`, `BAN_MEMBERS`).
+8. **`!play` / `/play`**: Join a Voice Channel and play music via direct search, YouTube link, or Apple Music URL (`https://music.apple.com/...`).
+
+Anti-raid protections activate automatically on member join — no command needed. To test:
+- Join with a Discord account created less than 24 hours ago → auto-kicked.
+- Join with a username containing 5+ repeating characters (e.g. `aaaaaUser`) → auto-kicked.
+- Trigger 6+ rapid joins within 10 seconds → rate limiting suppresses welcome/role assignment.
 
 ---
 

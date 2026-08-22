@@ -149,21 +149,21 @@ public class DatabaseManager {
         }, virtualThreadExecutor);
     }
 
-    public CompletableFuture<WikiEntry> getWikiEntry(String keyword) {
+    public CompletableFuture<List<String>> getRecentActivityStats(long guildId) {
         return CompletableFuture.supplyAsync(() -> {
-            String sql = "SELECT * FROM aegis_wiki WHERE keyword ILIKE ?";
+            String sql = "SELECT event_type, COUNT(*) as count FROM aegis_audit_log WHERE timestamp > NOW() - INTERVAL '24 hours' GROUP BY event_type";
+            List<String> stats = new ArrayList<>();
             try (Connection conn = dataSource.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, keyword);
                 try (ResultSet rs = pstmt.executeQuery()) {
-                    if (rs.next()) {
-                        return new WikiEntry(rs.getInt("id"), rs.getString("keyword"), rs.getString("content"), rs.getString("contributor"));
+                    while (rs.next()) {
+                        stats.add(rs.getString("event_type") + ": " + rs.getLong("count"));
                     }
                 }
             } catch (SQLException e) {
-                System.err.println("Error fetching wiki entry: " + e.getMessage());
+                System.err.println("Error fetching activity stats: " + e.getMessage());
             }
-            return null;
+            return stats;
         }, virtualThreadExecutor);
     }
 

@@ -1,4 +1,4 @@
-# 🛡️ Aegis Command Reference & Directory (v3.0.0+)
+# 🛡️ Aegis Command Reference & Directory (v4.0.0+)
 
 Welcome to the master command directory for **AshcrestHQ Aegis**. All commands support both traditional prefix execution (`!command`) and native Discord Slash Commands (`/command`).
 
@@ -17,10 +17,7 @@ Welcome to the master command directory for **AshcrestHQ Aegis**. All commands s
 | `hashid` | `!hashid <hash>` or `/hashid hash:<string>` | Identify probable cryptographic hash algorithm (MD5, SHA-1, SHA-256, bcrypt, etc.). |
 | `iplookup` | `!iplookup <ip>` or `/iplookup ip:<string>` | Passive IP geolocation and ASN provider registry lookup. |
 | `passwordstrength` | `/passwordstrength password:<string>` | Ephemerally test password bit entropy and brute-force resistance (never logged or saved). |
-| `breach` | `!breach <email>` or `/breach email:<string>` | Check if an email address has been compromised in known data breaches (HaveIBeenPwned API key required). |
 | `blacklist` | `!blacklist <ip\|domain>` or `/blacklist target:<string>` | Perform passive DNSBL blacklist lookup against Spamhaus & public RBL zones. |
-| `phishcheck` | `!phishcheck <url>` or `/phishcheck url:<string>` | Check URL against Google Safe Browsing threat list (Google Safe Browsing API key required). |
-| `cve` | `!cve <id>` or `/cve id:<string>` | Lookup CVE vulnerability details, CVSS severity scores, and description from NVD. |
 | `subdomains` | `!subdomains <domain>` or `/subdomains domain:<string>` | Enumerate subdomains passively via public Certificate Transparency logs (crt.sh). |
 | `audit` | `!audit` or `/audit` | Audit server roles, elevated administrator privileges, and misconfigurations. |
 
@@ -45,6 +42,11 @@ Welcome to the master command directory for **AshcrestHQ Aegis**. All commands s
 
 ### 🚨 Anti-Raid & Onboarding
 
+Aegis includes automatic join-time protections (no configuration required):
+- **Account Age Check**: Members with accounts less than 24 hours old are automatically kicked.
+- **Suspicious Username Detection**: Usernames with 5+ consecutive repeating characters are automatically kicked.
+- **Join Rate-Limiting**: If more than 5 members join within 10 seconds, role assignment and welcome messages are suppressed to mitigate raid impact.
+
 | Command | Usage | Description |
 | :--- | :--- | :--- |
 | `raidmode` | `!raidmode on\|off` or `/raidmode enabled:<boolean>` | Lock server verification level to Highest during active raid attacks. |
@@ -61,6 +63,14 @@ Welcome to the master command directory for **AshcrestHQ Aegis**. All commands s
 | `config spam-threshold` | `!config spam-threshold <n>` or `/config spam-threshold count:<int>` | Set maximum message count per rate interval before AutoMod flags. |
 | `config banned-words` | `!config banned-words <list>` or `/config banned-words words:<string>` | Set comma-separated list of banned words for AutoMod filter. |
 | `config prefix` | `!config prefix <symbol>` or `/config prefix prefix:<string>` | Set per-guild command prefix override (e.g. `?` or `.`). |
+
+---
+
+### 📊 Server Analytics
+
+| Command | Usage | Description |
+| :--- | :--- | :--- |
+| `dashboard` | `!dashboard` or `/dashboard` | Display server activity analytics for the last 24 hours (event breakdown by type from audit log). |
 
 ---
 

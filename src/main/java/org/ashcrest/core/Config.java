@@ -17,10 +17,6 @@ public class Config {
     public static final String GEMINI_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/512px-Google_Gemini_logo.svg.png";
     public static final String PUBLIC_INVITE_URL = "https://discord.com/oauth2/authorize?client_id=1497620745604563096&permissions=824938978566&integration_type=0&scope=applications.commands+bot";
 
-    public static final String HIBP_API_KEY = getEnvOrDefault("HIBP_API_KEY", "");
-    public static final String GOOGLE_SAFE_BROWSING_API_KEY = getEnvOrDefault("GOOGLE_SAFE_BROWSING_API_KEY", "");
-    public static final String NVD_API_KEY = getEnvOrDefault("NVD_API_KEY", "");
-
     public static final String DB_HOST = getEnvOrDefault("DB_HOST", "localhost");
     public static final String DB_PORT = getEnvOrDefault("DB_PORT", "5432");
     public static final String DB_NAME = getEnvOrDefault("DB_NAME", "ashcrest_aegis");

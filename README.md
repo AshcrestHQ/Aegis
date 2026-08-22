@@ -1,7 +1,7 @@
 # 🛡️ Aegis - AshcrestHQ Universal Discord Operations Bot
 
 > **Universal Discord Bot for Security, Community Operations, Cyber RPG, AI & VC Audio.**
-> Aegis is a high-performance, public Discord bot built with **Java 26** and **Virtual Threads**, engineered for server protection, anti-raid monitoring, permission auditing, community security wiki, interactive Cyber RPG mini-games, Google Gemini 3.6 Flash AI assistant, and full VC music playback.
+> Aegis is a high-performance, public Discord bot built with **Java 26** and **Virtual Threads**, engineered for server protection, anti-raid monitoring, permission auditing, community security wiki, interactive Cyber RPG mini-games, Google Gemini 3.6 Flash AI assistant, and full VC music playback. All features rely solely on local/free resources and the Gemini API — no paid third-party security APIs required.
 > 
 > 🔗 **[Click Here to Invite Aegis to Your Discord Server](https://discord.com/oauth2/authorize?client_id=1497620745604563096&permissions=824938978566&integration_type=0&scope=applications.commands+bot)**
 
@@ -20,7 +20,9 @@
 - 🎮 **Interactive Cyber Breach RPG**: High-octane cyber security penetration testing mini-game (`/hack`, `/profile`, `/leaderboard`, `/daily`) featuring interactive Discord Buttons, tactical intrusion vectors, hacker rank progression (`Script Kiddie` → `Netrunner` → `Security Architect` → `Cyber Sovereign`), and PostgreSQL vault economy (`🪙`).
 - 🤖 **Google Gemini AI Assistant**: Native `/ask` command powered by Google Gemini 3.6 Flash API executing asynchronously on Java 26 Virtual Threads.
 - 🔒 **Discord Voice DAVE E2EE & Lavaplayer Audio**: Full-featured Voice Channel music engine supporting Discord's end-to-end voice encryption (DAVE/JDAVE protocol), Apple Music metadata resolution (`music.apple.com`), YouTube multi-client fallback pipeline (`Web`, `Music`, `WebEmbedded`, `AndroidVr`, `Tv`, `Ios`, `Android`), interactive progress bars, and queue management.
-- 🛡️ **Security Recon & Permission Auditing**: Real-time permission risk audits (`/audit`), DNSSEC & SPF policy checks (`/dnsscan`), HTTP security headers grading (`/headers`), TLS cert inspection (`/ssl`), RFC 9116 checks (`/securitytxt`), hash algorithm identification (`/hashid`), IP geolocation & ASN lookup (`/iplookup`), ephemeral password entropy analysis (`/passwordstrength`), DNSBL Spamhaus blacklist queries (`/blacklist`), NVD CVE vulnerability lookups (`/cve`), and passive subdomain enumeration via Certificate Transparency (`/subdomains`). Note: `/breach` and `/phishcheck` require their respective API keys (`HIBP_API_KEY`, `GOOGLE_SAFE_BROWSING_API_KEY`) if enabled.
+- 🛡️ **Security Recon & Permission Auditing**: Real-time permission risk audits (`/audit`), DNSSEC & SPF policy checks (`/dnsscan`), HTTP security headers grading (`/headers`), TLS cert inspection (`/ssl`), RFC 9116 checks (`/securitytxt`), hash algorithm identification (`/hashid`), IP geolocation & ASN lookup (`/iplookup`), ephemeral password entropy analysis (`/passwordstrength`), DNSBL Spamhaus blacklist queries (`/blacklist`), and passive subdomain enumeration via Certificate Transparency (`/subdomains`). All recon features use only local/free resources — no external API keys required.
+- 🚨 **Anti-Raid & Join Protection**: Automatic account age checks (kicks accounts < 24 hours old), suspicious username pattern detection (5+ repeating chars), join rate-limiting (suppresses role/welcome on >5 joins/10s), and manual raid mode toggle. Combined with AutoMod spam filtering, verification gate, and auto-escalation (3 warnings = 1-hour timeout).
+- 📊 **Server Activity Dashboard**: Real-time analytics of server events over the last 24 hours (`/dashboard`), querying the audit log for event-type breakdown.
 - 📚 **PostgreSQL Community Wiki**: Integrated security knowledgebase and audit logging powered by HikariCP connection pooling (`/wikiadd`).
 - ⚡ **Async Virtual Thread Architecture**: Non-blocking event loop running on Java 26 Virtual Threads for ultra-low latency gateway responsiveness under heavy server load.
 
@@ -34,6 +36,8 @@ For complete documentation on all bot commands and usage, see the **[Commands Gu
 org.ashcrest/
 ├── core/             # AegisBot core, Virtual Threads executor & config
 ├── commands/         # Modular command pattern (audit, ashcrest, status, ask, hack, profile, leaderboard, daily)
+│   ├── antiraid/     # Anti-raid commands (raidmode, verify, automod, report)
+│   ├── moderation/   # Moderation commands (warn, mute, ban, kick, purge, lockdown, slowmode)
 │   └── music/        # Voice channel music commands (play, skip, stop, queue, etc.)
 ├── music/            # Lavaplayer audio engine, DAVE protocol config, Apple Music resolver & scheduler
 ├── security/         # Security audit, permission analysis & anti-raid engine
@@ -68,7 +72,7 @@ cp .env.example .env
 
 # 3. Build & Run
 mvn clean package
-java --enable-preview -jar target/aegis-3.0.0.jar
+java --enable-preview -jar target/aegis-4.0.0.jar
 ```
 
 ---

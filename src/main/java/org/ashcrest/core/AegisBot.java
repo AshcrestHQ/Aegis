@@ -59,6 +59,7 @@ public class AegisBot {
 
     private void registerCommands() {
         registerCommand(new StatusCommand());
+        registerCommand(new DashboardCommand());
         registerCommand(new AuditCommand());
         registerCommand(new HelpCommand());
         registerCommand(new WikiAddCommand(dbManager));
@@ -100,10 +101,7 @@ public class AegisBot {
         registerCommand(new HashIdCommand());
         registerCommand(new IpLookupCommand());
         registerCommand(new PasswordStrengthCommand());
-        registerCommand(new BreachCommand());
         registerCommand(new BlacklistCommand());
-        registerCommand(new PhishCheckCommand());
-        registerCommand(new CveCommand());
         registerCommand(new SubdomainsCommand());
 
 

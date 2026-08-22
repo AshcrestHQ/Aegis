@@ -18,7 +18,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.awt.Color;
 import java.time.Instant;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandListener extends ListenerAdapter {
     private final AegisBot bot;
@@ -116,11 +118,39 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
+    private static final Map<Long, Long> guildJoinCounts = new ConcurrentHashMap<>();
+    private static final Map<Long, Long> guildLastJoinTime = new ConcurrentHashMap<>();
+
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         long guildId = event.getGuild().getIdLong();
-        GuildSettingsManager.getInstance().getSettings(guildId).thenAccept(settings -> {
+        long now = System.currentTimeMillis();
 
+        // 1. Account Age Check (e.g., block accounts younger than 24 hours)
+        long accountAge = now - event.getMember().getUser().getTimeCreated().toInstant().toEpochMilli();
+        if (accountAge < 86400000L) { // 24 hours
+            event.getMember().kick().reason("Account too young (under 24 hours).").queue(null, throwable -> {});
+            return;
+        }
+
+        // 3. Username Pattern Detection (e.g., suspicious repeating characters)
+        if (isSuspiciousUsername(event.getMember().getEffectiveName())) {
+            event.getMember().kick().reason("Suspicious username pattern detected.").queue(null, throwable -> {});
+            return;
+        }
+
+        // 2. Join Rate Limiting (e.g., max 5 joins in 10 seconds)
+        long lastJoin = guildLastJoinTime.getOrDefault(guildId, 0L);
+        long count = (now - lastJoin < 10000) ? guildJoinCounts.getOrDefault(guildId, 0L) + 1 : 1;
+        guildJoinCounts.put(guildId, count);
+        guildLastJoinTime.put(guildId, now);
+
+        if (count > 5) {
+            // Potential raid detected
+            return;
+        }
+
+        GuildSettingsManager.getInstance().getSettings(guildId).thenAccept(settings -> {
             if (settings.unverifiedRoleId() > 0) {
                 Role unverifiedRole = event.getGuild().getRoleById(settings.unverifiedRoleId());
                 if (unverifiedRole != null) {
@@ -132,7 +162,6 @@ public class CommandListener extends ListenerAdapter {
                     event.getGuild().addRoleToMember(event.getMember(), role).queue(null, throwable -> {});
                 }
             }
-
 
             if (settings.welcomeChannelId() > 0) {
                 TextChannel welcomeChan = event.getGuild().getTextChannelById(settings.welcomeChannelId());
@@ -153,12 +182,11 @@ public class CommandListener extends ListenerAdapter {
                 }
             }
 
-
             postAuditLog(event.getGuild(), settings.modLogChannelId(), new EmbedBuilder()
                     .setTitle("📥 Member Joined")
                     .setColor(Color.GREEN)
                     .addField("User", event.getUser().getAsTag() + " (`" + event.getUser().getId() + "`)", false)
-                    .setTimestamp(Instant.now()));
+                    .addField("Account Age", (accountAge / 3600000L) + " hours", false));
         });
     }
 
@@ -201,6 +229,11 @@ public class CommandListener extends ListenerAdapter {
                     .addField("Message ID", event.getMessageId(), true)
                     .setTimestamp(Instant.now()));
         });
+    }
+
+    private boolean isSuspiciousUsername(String username) {
+        // Detect 5+ repeating consecutive characters
+        return username.matches(".*(.)\\1{4,}.*");
     }
 
     private void postAuditLog(net.dv8tion.jda.api.entities.Guild guild, long channelId, EmbedBuilder embed) {
