@@ -1,0 +1,18 @@
+name: 🔒 Security Vulnerability Report
+description: Instructions for securely reporting security vulnerabilities
+title: "[SECURITY]: "
+labels: ["security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### ⚠️ Important Notice
+
+        **Do NOT submit public bug reports for unpatched security vulnerabilities.**
+
+        Please follow our [Security Policy](../../SECURITY.md) to report vulnerabilities privately:
+
+        1. Use [GitHub Private Vulnerability Reporting](https://github.com/AshcrestHQ/Aegis/security/advisories/new) if available.
+        2. Or email the security team directly at **security@ashcrest.org**.
+
+        Thank you for helping keep Aegis and its communities secure!

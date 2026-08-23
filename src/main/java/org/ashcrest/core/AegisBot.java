@@ -164,6 +164,7 @@ public class AegisBot {
         jda.updateCommands().addCommands(
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("help", "Display Aegis commands categorized by security, game, wiki, and music"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("status", "Check Aegis bot system health, ping, and uptime"),
+                net.dv8tion.jda.api.interactions.commands.build.Commands.slash("dashboard", "View server activity statistics from the audit log (Last 24h)"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("audit", "Audit server permissions, roles, and administrative risk levels"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ashcrest", "View official links, public bot invite, and resources for AshcrestHQ"),
                 net.dv8tion.jda.api.interactions.commands.build.Commands.slash("cyberheaven", "View official links for CyberHeaven (alias)"),

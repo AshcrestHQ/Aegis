@@ -1,0 +1,64 @@
+name: 🐛 Bug Report
+description: Report an issue or unexpected behavior in Aegis
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please ensure you have checked existing issues before submitting.
+
+  - type: input
+    id: version
+    attributes:
+      label: Aegis Version
+      description: What version of Aegis are you running? (e.g. v4.0.0)
+      placeholder: v4.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: java_version
+    attributes:
+      label: Environment & Java Version
+      description: Operating System and Java runtime version (e.g., Linux Ubuntu 24.04, JDK 26)
+      placeholder: Ubuntu 24.04 / OpenJDK 26
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Run command '/audit'
+        2. Set configuration parameter...
+        3. See error in log output
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Stack Trace / Console Logs
+      description: Please paste any relevant error logs or console stack traces.
+      render: text
+    validations:
+      required: false
