@@ -6,7 +6,7 @@ Thank you for your interest in contributing to **Aegis**! We welcome contributio
 
 ## 📜 Code of Conduct
 
-By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please report any unacceptable behavior to security@ashcrest.org or open a confidential issue.
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please report any unacceptable behavior to medhansh.hq@outlook.com or open a confidential issue.
 
 ---
 
