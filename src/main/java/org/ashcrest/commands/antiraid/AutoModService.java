@@ -1,7 +1,6 @@
 package org.ashcrest.commands.antiraid;
 
 import org.ashcrest.db.GuildSettingsManager;
-import org.ashcrest.db.GuildSettingsManager.GuildSettings;
 import org.ashcrest.moderation.ModerationService;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

@@ -28,6 +28,7 @@ public class PlayerManager {
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager playerManager;
 
+    @SuppressWarnings("deprecation")
     private PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.playerManager = new DefaultAudioPlayerManager();

@@ -2,7 +2,6 @@ package org.ashcrest.commands;
 
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,6 +13,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +123,7 @@ public class QuoteCommand implements ICommand {
         String avatarUrl = message.getAuthor().getEffectiveAvatarUrl() + "?size=256";
         BufferedImage avatar = null;
         try {
-            avatar = ImageIO.read(new URL(avatarUrl));
+            avatar = ImageIO.read(URI.create(avatarUrl).toURL());
         } catch (Exception ignored) {}
         
         int avatarSize = 120;
@@ -150,7 +150,7 @@ public class QuoteCommand implements ICommand {
                     currentX += fm.stringWidth(el.content);
                 } else {
                     try {
-                        BufferedImage emj = ImageIO.read(new URL(el.content));
+                        BufferedImage emj = ImageIO.read(URI.create(el.content).toURL());
                         if (emj != null) {
                             g2d.drawImage(emj, currentX, currentY - EMOJI_SIZE + fm.getDescent() + 4, EMOJI_SIZE, EMOJI_SIZE, null);
                         }
