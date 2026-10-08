@@ -17,7 +17,7 @@
         <maven.compiler.source>26</maven.compiler.source>
         <maven.compiler.target>26</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.18.3</jackson.version>
+        <jackson.version>2.18.11</jackson.version>
     </properties>
 
     <repositories>
