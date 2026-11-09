@@ -1,3 +1,11 @@
+**This project has reached the end of its active development for now.
+
+It was a fun project to work on and taught me quite a bit along the way. I've since moved on to other things, but I didn't want to take the work down. I'm leaving the repository here in case it's useful to someone, or I decide to revisit it someday.
+
+Thanks for stopping by!**
+
+
+
 # 🛡️ Aegis - AshcrestHQ Universal Discord Operations Bot Engine
 
 [![CI](https://github.com/AshcrestHQ/Aegis/actions/workflows/ci.yml/badge.svg)](https://github.com/AshcrestHQ/Aegis/actions/workflows/ci.yml)
